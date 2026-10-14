@@ -1,0 +1,45 @@
+# Normalize line endings to LF for all text files on commit.
+# This keeps the repo consistent across Windows, macOS, and Linux.
+* text=auto eol=lf
+
+# Explicitly mark common text file types
+*.md        text eol=lf
+*.txt       text eol=lf
+*.toml      text eol=lf
+*.yaml      text eol=lf
+*.yml       text eol=lf
+*.json      text eol=lf
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.jsx       text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+*.css       text eol=lf
+*.html      text eol=lf
+*.py        text eol=lf
+*.pyi       text eol=lf
+*.sh        text eol=lf
+*.env       text eol=lf
+*.example   text eol=lf
+*.sql       text eol=lf
+*.gitignore text eol=lf
+*.editorconfig text eol=lf
+Makefile    text eol=lf
+
+# Binary files — never touch line endings
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.ico       binary
+*.svg       binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.otf       binary
+*.eot       binary
+*.pdf       binary
+*.zip       binary
+*.gz        binary
+*.tar       binary

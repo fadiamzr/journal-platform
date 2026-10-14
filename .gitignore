@@ -1,0 +1,73 @@
+# =============================================================================
+# Node / Next.js
+# =============================================================================
+node_modules/
+.next/
+out/
+.nuxt/
+dist/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+
+# =============================================================================
+# Python
+# =============================================================================
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+htmlcov/
+.coverage
+coverage.xml
+*.log
+
+# =============================================================================
+# Environment files — NEVER commit real env files
+# =============================================================================
+.env
+.env.*
+!.env.example
+
+# =============================================================================
+# OS / Editor junk
+# =============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+# Keep shared VSCode workspace settings if added later:
+# !.vscode/settings.json
+# !.vscode/extensions.json
+
+# =============================================================================
+# Supabase local state
+# =============================================================================
+supabase/.temp/
+supabase/.branches/
+
+# =============================================================================
+# Docker overrides (keep docker-compose.yml, ignore local overrides)
+# =============================================================================
+docker-compose.override.yml
+
+# =============================================================================
+# Logs & temp files
+# =============================================================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tmp
+*.temp

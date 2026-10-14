@@ -1,0 +1,4 @@
+# Script dependencies — install with: pip install -r requirements.txt
+httpx
+python-dotenv
+psycopg[binary]
