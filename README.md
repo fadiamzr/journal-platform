@@ -103,7 +103,17 @@ cd apps/web && pnpm dev
 
 | Phase | Scope | Status |
 |---|---|---|
-| 1 | Repo structure, config, docs, scripts | ✅ Complete |
-| 2 | FastAPI backend, RLS policies, migrations | 🔜 Planned |
-| 3 | Next.js frontend, i18n, UI components | 🔜 Planned |
-| 4 | CI/CD, Docker Compose, deployment | 🔜 Planned |
+| 1 | Environment — repo structure, config templates, docs, smoke test | ✅ Complete |
+| 2 | Database & RLS — Postgres schema, migrations, RLS policies, storage policies, pgTAP tests | ✅ Complete |
+| 3 | Auth & RBAC — custom access token hook adds `role` claim to JWT | 🔜 Planned |
+| 4 | FastAPI core — app scaffold, JWKS JWT middleware, role guards, Docker | 🔜 Planned |
+| 5 | AI extraction — LLM provider abstraction, metadata extraction pipeline | 🔜 Planned |
+| 6 | Workflow & review API — submission lifecycle, reviewer assignment, review endpoints | 🔜 Planned |
+| 7 | Frontend foundation — Next.js 15, next-intl (en/fr/ar + RTL), Supabase Auth | 🔜 Planned |
+| 8 | Author portal — submission wizard, revision upload, feedback view | 🔜 Planned |
+| 9 | Reviewer interface — assignment accept/decline, review form | 🔜 Planned |
+| 10 | Editor board — submission queue, reviewer assignment, decision workflow | 🔜 Planned |
+| 11 | Public reading — published article pages, issue archive, DOI resolution | 🔜 Planned |
+| 12 | Notifications — email on status change, assignment invitations | 🔜 Planned |
+| 13 | Testing & hardening — E2E tests, security audit, performance tuning | 🔜 Planned |
+| 14 | Deployment — Docker Compose prod, CI/CD, hosting, monitoring | 🔜 Planned |
