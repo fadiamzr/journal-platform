@@ -41,7 +41,8 @@ def _status_to_error_code(status_code: int) -> str:
         status.HTTP_405_METHOD_NOT_ALLOWED: "method_not_allowed",
         status.HTTP_408_REQUEST_TIMEOUT: "request_timeout",
         status.HTTP_409_CONFLICT: "conflict",
-        status.HTTP_422_UNPROCESSABLE_ENTITY: "validation_error",
+        status.HTTP_413_CONTENT_TOO_LARGE: "payload_too_large",
+        status.HTTP_422_UNPROCESSABLE_CONTENT: "validation_error",
         status.HTTP_429_TOO_MANY_REQUESTS: "too_many_requests",
         status.HTTP_500_INTERNAL_SERVER_ERROR: "internal_error",
         status.HTTP_502_BAD_GATEWAY: "bad_gateway",
@@ -151,7 +152,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         summary_msg = "; ".join(error_msgs) if error_msgs else "Invalid request payload"
 
         return JSONResponse(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             content={
                 "error": {
                     "code": "validation_error",

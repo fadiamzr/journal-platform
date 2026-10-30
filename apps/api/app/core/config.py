@@ -38,14 +38,16 @@ class Settings(BaseSettings):
     SUPABASE_URL: str = ""
     SUPABASE_SECRET_KEY: SecretStr = SecretStr("")
     SUPABASE_JWKS_URL: str = ""
+    SUPABASE_PUBLISHABLE_KEY: str = ""
 
     # JWT Authentication
     JWT_AUDIENCE: str = "authenticated"
     JWKS_CACHE_TTL_SECONDS: int = 600
 
-    # Networking & Uploads
+    # Networking, Uploads & Storage
     CORS_ORIGINS: str = ""
     MAX_UPLOAD_MB: int = 50
+    SIGNED_URL_SECONDS: int = 300
 
     # Database & Optional Services
     DATABASE_URL: SecretStr | None = None

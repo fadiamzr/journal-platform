@@ -44,5 +44,7 @@ Settings are loaded automatically from `apps/api/.env` (resolved relative to the
 | Phase | Scope | Status |
 |---|---|---|
 | **Phase 4** | FastAPI core — app scaffold, JWKS JWT middleware, role guards, Docker | Complete |
-| **Phase 5** | AI extraction — LLM provider abstraction (`LLM_PROVIDER`), metadata extraction | Planned |
-| **Phase 6** | Workflow & review API — submission lifecycle, reviewer assignment, decision endpoints | Planned |
+| **Phase 5** | AI extraction — LLM provider abstraction (`LLM_PROVIDER`), metadata extraction | Complete |
+| **Stage 1A** | Submissions, file uploads, blind-copy flow, verification, signed URLs | Complete |
+| **Stage 1B** | Reviewer assignments, reviewer dashboard, review submissions | Planned |
+

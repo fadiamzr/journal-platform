@@ -2,3 +2,4 @@
 httpx
 python-dotenv
 psycopg[binary]
+pypdf

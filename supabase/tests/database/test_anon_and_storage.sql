@@ -56,6 +56,16 @@ insert into public.submission_authors
 values
   ('a4000000-0000-0000-0000-000000000001', 1, 'Harriet Author', true);
 
+-- Submission version for anonymized manuscript
+insert into public.submission_versions
+  (submission_id, round, manuscript_path, anonymized_path, uploaded_by, anonymized_verified_at)
+values
+  ('a4000000-0000-0000-0000-000000000001', 1,
+   'a1000000-0000-0000-0000-000000000001/a4000000-0000-0000-0000-000000000001/v1.pdf',
+   'a4000000-0000-0000-0000-000000000001/v1.pdf',
+   'a1000000-0000-0000-0000-000000000001',
+   now());
+
 -- Reviewer assignment (accepted)
 insert into public.reviewer_assignments
   (id, submission_id, round, reviewer_id, status, invited_by)

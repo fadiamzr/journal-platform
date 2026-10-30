@@ -15,10 +15,12 @@ Settings are managed via Pydantic Settings and automatically loaded from `apps/a
 | `SUPABASE_URL` | String | — | **Yes** | Base URL for your Supabase project (e.g. `https://<ref>.supabase.co`). |
 | `SUPABASE_SECRET_KEY` | SecretStr | — | **Yes** | Supabase Secret API key ("new-format secret key" or service role key). Used only in `apikey` header. |
 | `SUPABASE_JWKS_URL` | String | — | **Yes** | Supabase Auth JWKS endpoint (`https://<ref>.supabase.co/auth/v1/.well-known/jwks.json`). |
+| `SUPABASE_PUBLISHABLE_KEY` | String | `""` | No (Lazy) | Supabase Publishable Key for user-scoped PostgREST client. Endpoints that require it return 503 if omitted. |
 | `JWT_AUDIENCE` | String | `authenticated` | No | Expected JWT `aud` claim for authenticated Supabase users. |
 | `JWKS_CACHE_TTL_SECONDS` | Integer | `600` | No | Duration (in seconds) to cache fetched public JWKS in memory. |
 | `CORS_ORIGINS` | String | `""` | No | Comma-delimited list of permitted CORS browser origins. |
 | `MAX_UPLOAD_MB` | Integer | `50` | No | Maximum allowed payload upload size in megabytes. |
+| `SIGNED_URL_SECONDS` | Integer | `300` | No | Validity duration (in seconds) for temporary signed file download URLs. |
 | `DATABASE_URL` | SecretStr | `None` | No | PostgreSQL connection URI for administrative or batch operations. |
 | `LLM_PROVIDER` | String | `None` | No | AI provider identifier (optional in Phase 4). |
 | `GEMINI_API_KEY` | SecretStr | `None` | No | Gemini API key (optional in Phase 4). |
@@ -96,6 +98,7 @@ All application errors—including HTTP exceptions, Pydantic validation errors, 
 
 ## 5. Route Table
 
+### Core & Health
 | Method | Path | Auth Required | Allowed Roles | Description |
 |---|---|---|---|---|
 | `GET` | `/health` | No | Public | Liveness probe; returns service status, environment, and version. |
@@ -106,8 +109,25 @@ All application errors—including HTTP exceptions, Pydantic validation errors, 
 | `GET` | `/debug/editor` | Yes (Bearer) | `editor`, `admin` | **Development only**: Tests editor access guard (permits admin). |
 | `GET` | `/debug/admin` | Yes (Bearer) | `admin` | **Development only**: Tests strict admin access guard. |
 
+### Submissions & Workflow (Stage 1A)
+| Method | Path | Auth Required | Allowed Roles | Description |
+|---|---|---|---|---|
+| `POST` | `/submissions` | Yes (Bearer) | Any authenticated | Creates a draft submission for the authenticated author. |
+| `GET` | `/submissions` | Yes (Bearer) | Any authenticated | List submissions: own submissions for authors, all submissions for editors/admins. |
+| `GET` | `/submissions/{id}` | Yes (Bearer) | Owner, Editor, Admin | Detailed view including metadata, authors, versions summary, and status history. |
+| `PUT` | `/submissions/{id}/metadata` | Yes (Bearer) | Owner, Editor, Admin | Update titles, abstracts, and keywords (draft or revisions_requested). |
+| `PUT` | `/submissions/{id}/authors` | Yes (Bearer) | Owner, Editor, Admin | Replace declared authors list (draft or revisions_requested). |
+| `POST` | `/submissions/{id}/manuscript` | Yes (Bearer) | Owner, Editor, Admin | Upload full manuscript PDF (multipart). |
+| `POST` | `/submissions/{id}/blind-copy` | Yes (Bearer) | Owner, Editor, Admin | Upload anonymized blind copy PDF (strips metadata, scans trace warnings). |
+| `POST` | `/submissions/{id}/submit` | Yes (Bearer) | Owner, Editor, Admin | Validate required files and metadata, transition draft -> submitted or revisions -> submitted. |
+| `GET` | `/submissions/{id}/files/{kind}` | Yes (Bearer) | Owner, Editor, Admin | Returns short-lived signed URL (300 s) for manuscript or blind-copy download. |
+| `POST` | `/submissions/{id}/blind-copy/verify` | Yes (Bearer) | `editor`, `admin` (No COI) | Mark blind copy verified for the current round. |
+| `POST` | `/submissions/{id}/blind-copy/reject` | Yes (Bearer) | `editor`, `admin` (No COI) | Reject blind copy with review note, requesting replacement. |
+| `POST` | `/submissions/{id}/start-review` | Yes (Bearer) | `editor`, `admin` (No COI) | Transition submitted -> in_review (requires verified blind copy). |
+
 > [!NOTE]
 > All `/debug/*` routes are conditionally registered **only** when `APP_ENV=development`. In production (`APP_ENV=production`), these routes are omitted entirely, returning 404 Not Found.
+
 
 ---
 

@@ -55,7 +55,12 @@ erDiagram
     text manuscript_path
     text anonymized_path
     bigint file_size_bytes
+    text response_to_reviewers
+    timestamptz anonymized_verified_at
+    uuid anonymized_verified_by FK
+    text anonymized_review_note
     uuid uploaded_by FK
+    timestamptz created_at
   }
   REVIEWER_ASSIGNMENTS {
     uuid id PK
@@ -188,13 +193,13 @@ Path components are compared as `text` in storage policies — folder components
 | `reviewer_assignments` | — | — | SELECT own · UPDATE(status) own | SELECT + INSERT + DELETE | SELECT + INSERT + DELETE |
 | `reviews` | — | — (view only) | SELECT/INSERT/UPDATE own (pre-submit) | SELECT all | SELECT all · DELETE |
 | `submission_status_history` | — | SELECT own | — | SELECT all | SELECT all |
-| `reviewer_submissions` *(view)* | — | — | SELECT (own assignments) | — | — |
+| `reviewer_submissions` *(view)* | — | — | SELECT (own assignments with verified blind copy) | — | — |
 | `author_review_feedback` *(view)* | — | SELECT own (post-decision) | — | — | — |
 | `published_articles` *(view)* | SELECT | SELECT | SELECT | SELECT | SELECT |
 | `published_article_authors` *(view)* | SELECT | SELECT | SELECT | SELECT | SELECT |
 | `published_issues` *(view)* | SELECT | SELECT | SELECT | SELECT | SELECT |
 | `manuscripts` *(bucket)* | — | CRUD own folder | — | SELECT all | SELECT all |
-| `manuscripts-anonymized` *(bucket)* | — | — | SELECT (accepted assignments) | SELECT all | SELECT all |
+| `manuscripts-anonymized` *(bucket)* | — | — | SELECT (accepted assignments with verified blind copy) | SELECT all | SELECT all |
 | `published` *(bucket)* | SELECT (public CDN) | SELECT | SELECT | CRUD | CRUD |
 
 > [!IMPORTANT] The `—` cells are enforced by **two** independent layers: (1) Postgres GRANT (no privilege granted) and (2) RLS policy (no matching rows). Both must pass for any data access to succeed.
@@ -206,9 +211,11 @@ Path components are compared as `text` in storage policies — folder components
 ## Key Design Decisions
 
 - **Double-blind in both directions**: reviewers never see `submission_authors` (or `author_id`). Authors never see `reviewer_id` or `assignment_id` — only the `reviewer_submissions` and `author_review_feedback` views, which strip those identifiers.
+- **Blind Copy Verification**: for every round, reviewers can only access a blind copy once an editor or admin has verified it (`anonymized_verified_at IS NOT NULL`). Both the `reviewer_submissions` view and storage policy on `manuscripts-anonymized` enforce this verification requirement.
+- **Author Path Isolation**: `private.guard_submission_versions()` enforces that non-editor/admin callers can only insert/update versions where `manuscript_path` matches `<auth.uid()>/<submission_id>/v<round>.pdf`, and cannot modify or insert `anonymized_*` fields directly.
 - **Views bypass RLS intentionally**: all five views are owned by `postgres`, which bypasses table RLS. Each view implements its own `WHERE auth.uid()` gate documented in its SQL comment.
 - **Audit trail is append-only**: `submission_status_history` has no client INSERT/UPDATE/DELETE grant. All rows are written by `private.record_status_change()` (SECURITY DEFINER trigger).
-- **`private` schema**: never exposed by PostgREST. Holds `set_updated_at`, `handle_new_user`, `validate_status_transition`, `record_status_change`, `valid_i18n_keys`, and the three role-helper functions.
+- **`private` schema**: never exposed by PostgREST. Holds `set_updated_at`, `handle_new_user`, `validate_status_transition`, `record_status_change`, `valid_i18n_keys`, `guard_submission_versions`, and the three role-helper functions.
 
 ---
 

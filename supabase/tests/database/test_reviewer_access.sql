@@ -49,12 +49,13 @@ values
 
 -- Submission version with both paths
 insert into public.submission_versions
-  (submission_id, round, manuscript_path, anonymized_path, uploaded_by)
+  (submission_id, round, manuscript_path, anonymized_path, uploaded_by, anonymized_verified_at)
 values
   ('d5000000-0000-0000-0000-000000000001', 1,
    'd1000000-0000-0000-0000-000000000001/d5000000-0000-0000-0000-000000000001/v1.pdf',
    'd5000000-0000-0000-0000-000000000001/v1.pdf',
-   'd1000000-0000-0000-0000-000000000001');
+   'd1000000-0000-0000-0000-000000000001',
+   now());
 
 -- Assignment A: still invited (anonymized_path should be null in view)
 insert into public.reviewer_assignments

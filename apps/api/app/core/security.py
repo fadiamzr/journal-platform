@@ -31,6 +31,7 @@ class AuthenticatedUser:
     email: str | None
     user_role: Role | None
     raw_claims: dict[str, Any]
+    token: str = ""
 
 
 class JWKSCache:
@@ -260,4 +261,5 @@ async def verify_jwt_token(
         email=str(email) if email else None,
         user_role=user_role,
         raw_claims=payload,
+        token=token,
     )
