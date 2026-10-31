@@ -5,6 +5,7 @@ Loads and validates environment variables from apps/api/.env regardless of the C
 
 from __future__ import annotations
 
+import logging
 import re
 from functools import lru_cache
 from pathlib import Path
@@ -20,6 +21,8 @@ _DEFAULT_ENV_FILE = _API_DIR / ".env"
 
 _REF_RE = re.compile(r"postgres\.([a-z0-9]+)", re.IGNORECASE)
 _URL_REF_RE = re.compile(r"https?://([a-z0-9]+)\.supabase\.(?:co|in|net)", re.IGNORECASE)
+
+logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
@@ -49,9 +52,20 @@ class Settings(BaseSettings):
 
     # Database & Optional Services
     DATABASE_URL: SecretStr | None = None
-    LLM_PROVIDER: str | None = None
+
+    # ---------------------------------------------------------------------------
+    # LLM / AI extraction settings (Phase 5)
+    # ---------------------------------------------------------------------------
+    LLM_PROVIDER: Literal["gemini", "ollama", "anthropic"] = "gemini"
+    LLM_TIMEOUT_SECONDS: int = 120
+    LLM_MAX_RETRIES: int = 3
+    LLM_MAX_RPM: int = 10
+    EXTRACTION_MAX_PDF_MB: float = 18.0
+
+    # GEMINI_API_KEY is validated lazily (only when GeminiProvider is instantiated)
+    # so that existing setups without Gemini configured keep working.
     GEMINI_API_KEY: SecretStr | None = None
-    GEMINI_MODEL: str | None = None
+    GEMINI_MODEL: str = "gemini-3.5-flash-lite"
 
     @model_validator(mode="after")
     def validate_required_settings(self) -> Self:
@@ -69,6 +83,15 @@ class Settings(BaseSettings):
             raise ValueError(
                 f"Missing required environment variables: {', '.join(missing)}"
             )
+
+        # Warn about free-tier Gemini privacy implications in production
+        if self.APP_ENV == "production" and self.LLM_PROVIDER == "gemini":
+            logger.warning(
+                "PRIVACY WARNING: Free-tier Gemini may use submitted inputs to improve "
+                "Google products. Real academic manuscripts should use a paid Gemini tier "
+                "or a local model (LLM_PROVIDER=ollama) in production."
+            )
+
         return self
 
     @property
