@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from fastapi import APIRouter
 
-from app.api.routes import debug, health, me, submissions
+from app.api.routes import debug, extraction, health, me, submissions
 from app.core.config import Settings, get_settings
 
 
@@ -22,6 +22,9 @@ def create_api_router(settings: Settings | None = None) -> APIRouter:
     router.include_router(health.router)
     router.include_router(me.router)
     router.include_router(submissions.router)
+
+    # AI extraction endpoints (Phase 5)
+    router.include_router(extraction.router)
 
     # Debug role endpoints registered strictly in development
     if settings.APP_ENV == "development":
