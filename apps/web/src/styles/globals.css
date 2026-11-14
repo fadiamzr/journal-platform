@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ink: #111111;
+    --paper: #ffffff;
+    --paper-alt: #f7f6f2;
+    --rule: #d9d7d0;
+    --muted-text: #5b5b57;
+    --accent: #1b2a4a;
+    --accent-bg: #e4e8ef;
+    --success: #2f5d3a;
+    --success-bg: #e8f0ea;
+    --warning: #8a5a00;
+    --warning-bg: #fff3d6;
+    --danger: #8b1e2d;
+    --danger-bg: #f5e1e4;
+
+    /* shadcn / component semantic mappings */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%; /* #111111 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 0 0% 7%; /* solid ink */
+    --primary-foreground: 0 0% 100%; /* white */
+    --secondary: 48 18% 96%; /* #F7F6F2 */
+    --secondary-foreground: 0 0% 7%;
+    --muted: 48 18% 96%;
+    --muted-foreground: 60 2% 35%; /* #5B5B57 */
+    --accent-ui: 221 46% 20%; /* #1B2A4A */
+    --accent-ui-foreground: 0 0% 100%;
+    --destructive: 352 64% 33%; /* #8B1E2D */
+    --destructive-foreground: 0 0% 100%;
+    --border: 45 11% 83%; /* #D9D7D0 */
+    --input: 45 11% 83%;
+    --ring: 221 46% 20%; /* #1B2A4A */
+    --radius: 3px;
+
+    /* Default font mappings */
+    --font-heading: var(--font-source-serif), Georgia, serif;
+    --font-body: var(--font-inter), -apple-system, sans-serif;
+  }
+
+  .font-ar-body {
+    --font-heading: var(--font-amiri), "Traditional Arabic", serif;
+    --font-body: var(--font-ibm-arabic), Tahoma, sans-serif;
+  }
+
+  .font-latin-body {
+    --font-heading: var(--font-source-serif), Georgia, serif;
+    --font-body: var(--font-inter), -apple-system, sans-serif;
+  }
+
+  * {
+    border-color: #d9d7d0;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #111111;
+    font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reading article prose typography */
+  .prose-academic {
+    font-family: var(--font-heading), Georgia, serif;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #111111;
+  }
+
+  /* Visible focus indicator for full accessibility */
+  :focus-visible {
+    outline: 2px solid #1b2a4a;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    body {
+      background: #ffffff !important;
+      color: #000000 !important;
+    }
+    .print-only {
+      display: block !important;
+    }
+  }
+}
