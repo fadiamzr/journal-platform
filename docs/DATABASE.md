@@ -211,11 +211,11 @@ Path components are compared as `text` in storage policies — folder components
 ## Key Design Decisions
 
 - **Double-blind in both directions**: reviewers never see `submission_authors` (or `author_id`). Authors never see `reviewer_id` or `assignment_id` — only the `reviewer_submissions` and `author_review_feedback` views, which strip those identifiers.
-- **Blind Copy Verification**: for every round, reviewers can only access a blind copy once an editor or admin has verified it (`anonymized_verified_at IS NOT NULL`). Both the `reviewer_submissions` view and storage policy on `manuscripts-anonymized` enforce this verification requirement.
+- **Blind Copy Verification & Reviewer Storage Access**: for every round, reviewers can only access a blind copy once an editor or admin has verified it (`anonymized_verified_at IS NOT NULL`). Both the `reviewer_submissions` view and storage policy on `manuscripts-anonymized` enforce this requirement. Because reviewers intentionally have no `SELECT` grant on `public.submission_versions` (preserving double-blind author isolation), an inline subquery in the storage policy would execute under the reviewer's context and return zero rows. Therefore, the policy delegates to `private.reviewer_can_read_blind_copy(name)` — a `SECURITY DEFINER` helper with an empty `search_path` that validates assignment status and the verification timestamp without weakening table RLS.
 - **Author Path Isolation**: `private.guard_submission_versions()` enforces that non-editor/admin callers can only insert/update versions where `manuscript_path` matches `<auth.uid()>/<submission_id>/v<round>.pdf`, and cannot modify or insert `anonymized_*` fields directly.
 - **Views bypass RLS intentionally**: all five views are owned by `postgres`, which bypasses table RLS. Each view implements its own `WHERE auth.uid()` gate documented in its SQL comment.
 - **Audit trail is append-only**: `submission_status_history` has no client INSERT/UPDATE/DELETE grant. All rows are written by `private.record_status_change()` (SECURITY DEFINER trigger).
-- **`private` schema**: never exposed by PostgREST. Holds `set_updated_at`, `handle_new_user`, `validate_status_transition`, `record_status_change`, `valid_i18n_keys`, `guard_submission_versions`, and the three role-helper functions.
+- **`private` schema**: never exposed by PostgREST. Holds `set_updated_at`, `handle_new_user`, `validate_status_transition`, `record_status_change`, `valid_i18n_keys`, `guard_submission_versions`, `reviewer_can_read_blind_copy`, and the three role-helper functions.
 
 ---
 
