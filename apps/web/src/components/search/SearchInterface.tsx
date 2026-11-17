@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
-import type { Article, Issue } from "@/lib/domain/types";
-import { useRouter, usePathname } from "@/i18n/routing";
+import React, { useState, useEffect, useTransition, useCallback } from "react";
+import type { Article, Issue, Locale } from "@/lib/domain/types";
+import { useRouter, usePathname, Link } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArticleCard } from "@/components/shared/ArticleCard";
+import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/shared/EmptyState";
-import { Search as SearchIcon, X, SlidersHorizontal } from "lucide-react";
+import { AuthorList } from "@/components/shared/AuthorList";
+import { formatLocalizedDate, formatVolumeIssue } from "@/lib/utils";
+import { Search as SearchIcon, X, SlidersHorizontal, ArrowUpRight, FileText } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -23,8 +25,30 @@ interface SearchInterfaceProps {
   issues: Issue[];
 }
 
+function HighlightMatch({ text, query }: { text: string; query: string }) {
+  if (!query.trim() || !text) return <>{text}</>;
+  const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(`(${escaped})`, "gi");
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === query.trim().toLowerCase() ? (
+          <mark key={i} className="bg-gold/30 text-ink rounded-[2px] px-0.5 font-medium">
+            {part}
+          </mark>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+}
+
 export function SearchInterface({ initialArticles, issues }: SearchInterfaceProps) {
   const t = useTranslations("search");
+  const tCommon = useTranslations("common");
+  const currentLocale = useLocale() as Locale;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,22 +61,37 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
 
   const [inputQuery, setInputQuery] = useState(currentQuery);
 
+  // Sync state if URL query changes
   useEffect(() => {
     setInputQuery(currentQuery);
   }, [currentQuery]);
 
-  const updateFilters = (key: string, val: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (val && val !== "all") {
-      params.set(key, val);
-    } else {
-      params.delete(key);
-    }
+  const updateFilters = useCallback(
+    (key: string, val: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (val && val !== "all") {
+        params.set(key, val);
+      } else {
+        params.delete(key);
+      }
 
-    startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`);
-    });
-  };
+      startTransition(() => {
+        router.replace(`${pathname}?${params.toString()}`);
+      });
+    },
+    [pathname, router, searchParams]
+  );
+
+  // Live debounced search while typing (~250ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputQuery.trim() !== currentQuery) {
+        updateFilters("q", inputQuery.trim());
+      }
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [inputQuery, currentQuery, updateFilters]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,11 +105,11 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
     });
   };
 
-  // Filter client-side over initialArticles (or can call api.searchArticles)
+  // Filter client-side over initialArticles
   let filtered = [...initialArticles];
 
-  if (currentQuery.trim()) {
-    const q = currentQuery.trim().toLowerCase();
+  if (inputQuery.trim()) {
+    const q = inputQuery.trim().toLowerCase();
     filtered = filtered.filter((art) => {
       const titleMatch = Object.values(art.title).some((t) => t?.toLowerCase().includes(q));
       const abstractMatch = Object.values(art.abstract).some((a) => a?.toLowerCase().includes(q));
@@ -99,20 +138,21 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
   );
 
   const hasActiveFilters =
-    Boolean(currentQuery) || currentLang !== "all" || currentYear !== "all" || currentIssue !== "all";
+    Boolean(inputQuery) || currentLang !== "all" || currentYear !== "all" || currentIssue !== "all";
 
   return (
-    <div className="space-y-8">
-      {/* Search Input Box */}
+    <div className="space-y-8 pb-12">
+      {/* Search Input Box with Live Debounced updates */}
       <form onSubmit={handleSearchSubmit} className="relative">
         <Input
           type="search"
           value={inputQuery}
           onChange={(e) => setInputQuery(e.target.value)}
           placeholder={t("queryPlaceholder")}
-          className="h-12 ps-4 pe-24 text-base bg-paper rounded-[3px] border-rule"
+          aria-label={t("queryPlaceholder")}
+          className="h-12 ps-4 pe-28 text-base bg-paper rounded-[3px] border-rule focus-visible:border-accent shadow-sm"
         />
-        <div className="absolute end-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+        <div className="absolute end-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
           {inputQuery && (
             <Button
               type="button"
@@ -123,14 +163,14 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
                 setInputQuery("");
                 updateFilters("q", "");
               }}
-              aria-label="Clear query"
+              aria-label={t("clearQuery")}
             >
               <X className="h-4 w-4" />
             </Button>
           )}
-          <Button type="submit" size="sm" className="h-8 text-xs">
+          <Button type="submit" size="sm" className="h-8 text-xs px-3 shadow-warm">
             <SearchIcon className="h-3.5 w-3.5 me-1.5" />
-            <span>Search</span>
+            <span>{tCommon("search")}</span>
           </Button>
         </div>
       </form>
@@ -139,7 +179,7 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
       <div className="flex flex-wrap items-center gap-3 p-3 bg-paper-alt rounded-[3px] border border-rule text-xs">
         <div className="flex items-center gap-1.5 text-muted font-medium me-1">
           <SlidersHorizontal className="h-3.5 w-3.5" />
-          <span>Filters:</span>
+          <span>{t("filters")}:</span>
         </div>
 
         {/* Language Filter */}
@@ -193,7 +233,7 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
               <SelectItem value="all">{t("allIssues")}</SelectItem>
               {issues.map((iss) => (
                 <SelectItem key={iss.id} value={iss.id}>
-                  Vol. {iss.volume}, No. {iss.number} ({iss.year})
+                  {formatVolumeIssue(iss.volume, iss.number, currentLocale)} ({iss.year})
                 </SelectItem>
               ))}
             </SelectContent>
@@ -218,20 +258,121 @@ export function SearchInterface({ initialArticles, issues }: SearchInterfaceProp
         <h2 className="text-sm font-semibold uppercase tracking-wider text-muted font-body">
           {t("resultsCount", { count: filtered.length })}
         </h2>
-        {isPending && <span className="text-xs text-muted">Updating results…</span>}
+        {isPending && <span className="text-xs text-muted animate-pulse">{t("updating")}</span>}
       </div>
 
-      {/* Results List */}
+      {/* Results List with Highlighted Matches and Animated Changes */}
       {filtered.length > 0 ? (
-        <div className="divide-y divide-rule">
-          {filtered.map((article) => (
-            <ArticleCard key={article.id} article={article} showAbstract={true} />
-          ))}
+        <div className="divide-y divide-rule transition-opacity duration-200">
+          {filtered.map((article) => {
+            const title =
+              article.title[currentLocale] ||
+              article.title[article.manuscriptLanguage] ||
+              Object.values(article.title)[0] ||
+              "";
+
+            const abstract =
+              article.abstract[currentLocale] ||
+              article.abstract[article.manuscriptLanguage] ||
+              Object.values(article.abstract)[0] ||
+              "";
+
+            const volIssue = formatVolumeIssue(article.volume ?? 1, article.number ?? 1, currentLocale);
+
+            const subjectChip =
+              article.keywords[currentLocale]?.[0] ||
+              article.keywords[article.manuscriptLanguage]?.[0] ||
+              article.manuscriptLanguage.toUpperCase();
+
+            return (
+              <article
+                key={article.id}
+                className="group py-5 first:pt-0 transition-all duration-200 hover:bg-paper-alt/40 px-3 -mx-3 rounded-[3px]"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted mb-2 font-body">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[11px] text-accent font-medium">
+                      {volIssue} ({article.year})
+                    </span>
+                    {article.publishedAt && (
+                      <>
+                        <span aria-hidden="true" className="text-rule">•</span>
+                        <time dateTime={article.publishedAt} className="text-[11px]">
+                          {formatLocalizedDate(article.publishedAt, currentLocale, {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </time>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] font-normal py-0 px-1.5 bg-paper-alt border-rule text-muted"
+                    >
+                      {subjectChip}
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="text-[10px] font-mono uppercase py-0 px-1.5 border-accent/20 text-accent"
+                    >
+                      {article.manuscriptLanguage}
+                    </Badge>
+                  </div>
+                </div>
+
+                <h3 className="text-base sm:text-lg font-heading font-semibold text-ink group-hover:text-accent transition-colors leading-snug">
+                  <Link
+                    href={`/articles/${article.id}`}
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    <span>
+                      <HighlightMatch text={title} query={inputQuery} />
+                    </span>
+                    <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 rtl:rotate-90" />
+                  </Link>
+                </h3>
+
+                <div className="mt-1.5">
+                  <AuthorList authors={article.authors} showAffiliations={false} />
+                </div>
+
+                {abstract && (
+                  <p className="mt-2 text-xs sm:text-sm text-muted font-body line-clamp-2 leading-relaxed">
+                    <HighlightMatch text={abstract} query={inputQuery} />
+                  </p>
+                )}
+
+                <div className="mt-3 flex items-center justify-between pt-2">
+                  <a
+                    href={article.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline font-medium"
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                    <span>{tCommon("pdf")}</span>
+                  </a>
+
+                  <Link
+                    href={`/articles/${article.id}`}
+                    className="inline-flex items-center gap-1 text-xs text-muted hover:text-accent transition-colors font-medium"
+                  >
+                    <span>{tCommon("viewArticle")}</span>
+                    <ArrowUpRight className="h-3 w-3 rtl:rotate-90" />
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
       ) : (
         <EmptyState
           title={t("noResults")}
-          description="Try broadening your search terms or resetting the language and year filters."
+          description={t("emptyQuery")}
           action={
             hasActiveFilters ? (
               <Button variant="outline" size="sm" onClick={handleClearFilters}>

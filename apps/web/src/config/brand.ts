@@ -48,6 +48,10 @@ export interface BrandConfig {
   logo: {
     wordmark: string;
     alt: string;
+    monogram?: {
+      letter: string;
+      subtext?: string;
+    };
   };
 }
 
@@ -128,5 +132,9 @@ export const brand: BrandConfig = {
   logo: {
     wordmark: "JOURNAL",
     alt: "Journal of Humanities & Social Sciences",
+    monogram: {
+      letter: "J",
+      subtext: "PRESS",
+    },
   },
 };

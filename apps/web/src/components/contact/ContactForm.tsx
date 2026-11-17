@@ -40,7 +40,7 @@ export function ContactForm() {
       >
         <div className="flex items-center gap-2 text-success">
           <CheckCircle2 className="h-5 w-5" />
-          <h3 className="text-sm font-semibold font-body">Message Dispatched</h3>
+          <h3 className="text-sm font-semibold font-body">{t("messageDispatched")}</h3>
         </div>
         <p className="text-xs text-ink/90 font-body leading-relaxed">
           {t("sentSuccess")}
@@ -55,7 +55,7 @@ export function ContactForm() {
           }}
           className="mt-2 text-xs"
         >
-          Send another message
+          {t("sendAnother")}
         </Button>
       </div>
     );
@@ -118,9 +118,9 @@ export function ContactForm() {
         />
       </div>
 
-      <Button type="submit" disabled={loading} size="sm" className="w-full sm:w-auto">
+      <Button type="submit" disabled={loading} size="sm" className="w-full sm:w-auto shadow-warm">
         <Send className="h-3.5 w-3.5 me-1.5" />
-        <span>{loading ? "Sending…" : t("sendButton")}</span>
+        <span>{loading ? t("sending") : t("sendButton")}</span>
       </Button>
     </form>
   );

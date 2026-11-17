@@ -3,48 +3,172 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --ink: #111111;
-    --paper: #ffffff;
-    --paper-alt: #f7f6f2;
-    --rule: #d9d7d0;
-    --muted-text: #5b5b57;
-    --accent: #1b2a4a;
-    --accent-bg: #e4e8ef;
+  /* ========================================================================
+     PRESET 1: "press" (DEFAULT)
+     Warm university-press palette: warm parchment, deep burgundy, antique gold
+     ======================================================================== */
+  :root,
+  [data-theme="press"] {
+    --paper: #fbf8f1;
+    --paper-rgb: 251 248 241;
+    --paper-alt: #f3ede0;
+    --paper-alt-rgb: 243 237 224;
+    --ink: #1f1b16;
+    --ink-rgb: 31 27 22;
+    --muted-text: #6b6256;
+    --muted-text-rgb: 107 98 86;
+    --rule: #ddd3c0;
+    --rule-rgb: 221 211 192;
+    --accent: #7a1f2b;
+    --accent-rgb: 122 31 43;
+    --accent-hover: #5e1722;
+    --accent-hover-rgb: 94 23 34;
+    --accent-bg: #faebed;
+    --gold: #b08d3c;
+    --gold-rgb: 176 141 60;
     --success: #2f5d3a;
-    --success-bg: #e8f0ea;
+    --success-rgb: 47 93 58;
+    --success-bg: #eaf3ed;
     --warning: #8a5a00;
-    --warning-bg: #fff3d6;
+    --warning-rgb: 138 90 0;
+    --warning-bg: #fff5df;
     --danger: #8b1e2d;
-    --danger-bg: #f5e1e4;
+    --danger-rgb: 139 30 45;
+    --danger-bg: #fae9ec;
 
     /* shadcn / component semantic mappings */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 7%; /* #111111 */
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
-    --primary: 0 0% 7%; /* solid ink */
-    --primary-foreground: 0 0% 100%; /* white */
-    --secondary: 48 18% 96%; /* #F7F6F2 */
-    --secondary-foreground: 0 0% 7%;
-    --muted: 48 18% 96%;
-    --muted-foreground: 60 2% 35%; /* #5B5B57 */
-    --accent-ui: 221 46% 20%; /* #1B2A4A */
+    --background: 42 55% 96%; /* #FBF8F1 */
+    --foreground: 33 17% 10%; /* #1F1B16 */
+    --card: 42 55% 96%;
+    --card-foreground: 33 17% 10%;
+    --popover: 42 55% 96%;
+    --popover-foreground: 33 17% 10%;
+    --primary: 353 60% 30%; /* #7A1F2B */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 39 40% 91%; /* #F3EDE0 */
+    --secondary-foreground: 33 17% 10%;
+    --muted: 39 40% 91%;
+    --muted-foreground: 34 11% 38%; /* #6B6256 */
+    --accent-ui: 353 60% 30%;
     --accent-ui-foreground: 0 0% 100%;
-    --destructive: 352 64% 33%; /* #8B1E2D */
+    --destructive: 352 64% 33%;
     --destructive-foreground: 0 0% 100%;
-    --border: 45 11% 83%; /* #D9D7D0 */
-    --input: 45 11% 83%;
-    --ring: 221 46% 20%; /* #1B2A4A */
+    --border: 40 29% 81%; /* #DDD3C0 */
+    --input: 40 29% 81%;
+    --ring: 353 60% 30%;
     --radius: 3px;
 
-    /* Default font mappings */
     --font-heading: var(--font-source-serif), Georgia, serif;
     --font-body: var(--font-inter), -apple-system, sans-serif;
   }
 
+  /* ========================================================================
+     PRESET 2: "atlas"
+     Scholarly atlas palette: warm stone paper, deep teal, rich antique gold
+     ======================================================================== */
+  [data-theme="atlas"] {
+    --paper: #faf8f3;
+    --paper-rgb: 250 248 243;
+    --paper-alt: #efede4;
+    --paper-alt-rgb: 239 237 228;
+    --ink: #17211f;
+    --ink-rgb: 23 33 31;
+    --muted-text: #5b6661;
+    --muted-text-rgb: 91 102 97;
+    --rule: #d8d6ca;
+    --rule-rgb: 216 214 202;
+    --accent: #0f4c4a;
+    --accent-rgb: 15 76 74;
+    --accent-hover: #0a3836;
+    --accent-hover-rgb: 10 56 54;
+    --accent-bg: #e6f0ef;
+    --gold: #b8893a;
+    --gold-rgb: 184 137 58;
+    --success: #2f5d3a;
+    --success-rgb: 47 93 58;
+    --success-bg: #eaf3ed;
+    --warning: #8a5a00;
+    --warning-rgb: 138 90 0;
+    --warning-bg: #fff5df;
+    --danger: #8b1e2d;
+    --danger-rgb: 139 30 45;
+    --danger-bg: #fae9ec;
+
+    --background: 43 41% 97%; /* #FAF8F3 */
+    --foreground: 168 18% 11%; /* #17211F */
+    --card: 43 41% 97%;
+    --card-foreground: 168 18% 11%;
+    --popover: 43 41% 97%;
+    --popover-foreground: 168 18% 11%;
+    --primary: 179 67% 18%; /* #0F4C4A */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 23% 92%; /* #EFEDE4 */
+    --secondary-foreground: 168 18% 11%;
+    --muted: 45 23% 92%;
+    --muted-foreground: 156 6% 38%; /* #5B6661 */
+    --accent-ui: 179 67% 18%;
+    --accent-ui-foreground: 0 0% 100%;
+    --destructive: 352 64% 33%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 51 17% 82%; /* #D8D6CA */
+    --input: 51 17% 82%;
+    --ring: 179 67% 18%;
+  }
+
+  /* ========================================================================
+     PRESET 3: "ink"
+     Classic editorial monochrome with deep academic navy accent
+     ======================================================================== */
+  [data-theme="ink"] {
+    --paper: #ffffff;
+    --paper-rgb: 255 255 255;
+    --paper-alt: #f7f6f2;
+    --paper-alt-rgb: 247 246 242;
+    --ink: #111111;
+    --ink-rgb: 17 17 17;
+    --muted-text: #5b5b57;
+    --muted-text-rgb: 91 91 87;
+    --rule: #d9d7d0;
+    --rule-rgb: 217 215 208;
+    --accent: #1b2a4a;
+    --accent-rgb: 27 42 74;
+    --accent-hover: #121c33;
+    --accent-hover-rgb: 18 28 51;
+    --accent-bg: #e4e8ef;
+    --gold: #9c7a28;
+    --gold-rgb: 156 122 40;
+    --success: #2f5d3a;
+    --success-rgb: 47 93 58;
+    --success-bg: #e8f0ea;
+    --warning: #8a5a00;
+    --warning-rgb: 138 90 0;
+    --warning-bg: #fff3d6;
+    --danger: #8b1e2d;
+    --danger-rgb: 139 30 45;
+    --danger-bg: #f5e1e4;
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 221 46% 20%; /* #1B2A4A */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 48 18% 96%;
+    --secondary-foreground: 0 0% 7%;
+    --muted: 48 18% 96%;
+    --muted-foreground: 60 2% 35%;
+    --accent-ui: 221 46% 20%;
+    --accent-ui-foreground: 0 0% 100%;
+    --destructive: 352 64% 33%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 45 11% 83%;
+    --input: 45 11% 83%;
+    --ring: 221 46% 20%;
+  }
+
+  /* Font mappings based on direction / locale */
   .font-ar-body {
     --font-heading: var(--font-amiri), "Traditional Arabic", serif;
     --font-body: var(--font-ibm-arabic), Tahoma, sans-serif;
@@ -56,17 +180,33 @@
   }
 
   * {
-    border-color: #d9d7d0;
+    border-color: rgb(var(--rule-rgb));
   }
 
   body {
-    background-color: #ffffff;
-    color: #111111;
+    background-color: var(--paper);
+    color: var(--ink);
     font-family: var(--font-body), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 15px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 200ms ease-out, color 200ms ease-out;
+  }
+
+  /* Academic sliding underline link */
+  .academic-link {
+    color: var(--accent);
+    text-decoration: none;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0% 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 180ms ease-out, color 150ms ease-out;
+  }
+  .academic-link:hover,
+  .academic-link:focus-visible {
+    background-size: 100% 1px;
   }
 
   /* Reading article prose typography */
@@ -74,12 +214,12 @@
     font-family: var(--font-heading), Georgia, serif;
     font-size: 17px;
     line-height: 1.7;
-    color: #111111;
+    color: var(--ink);
   }
 
   /* Visible focus indicator for full accessibility */
   :focus-visible {
-    outline: 2px solid #1b2a4a;
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 

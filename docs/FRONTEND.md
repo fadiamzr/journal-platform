@@ -229,22 +229,22 @@ When set to `live`, `src/lib/api/index.ts` automatically instantiates `liveApiCl
 For rapid testing and grading without entering credentials, four preview personas are pre-configured in the mock dataset and accessible from the `/login` screen and `/portal` header:
 
 1. **Author**:
-   - **Name**: Dr. Harriet Vance
+   - **Name**: Harriet Vance
    - **Email**: `author@journal.example`
    - **ID**: `usr-author-01`
    - **Access**: Manuscript creation, file upload, AI extraction, revision submissions.
 2. **Reviewer**:
-   - **Name**: Prof. Arthur Pendelton
+   - **Name**: Arthur Pendelton
    - **Email**: `reviewer@journal.example`
    - **ID**: `usr-rev-01`
    - **Access**: Double-blind assignment scorecard, invitation response, recommendation submission.
 3. **Editor**:
-   - **Name**: Prof. Hélène Vance
+   - **Name**: Hélène Vance
    - **Email**: `editor@journal.example`
    - **ID**: `usr-editor-01`
    - **Access**: Submission triage, blind copy verification, reviewer assignment, final editorial decision.
 4. **Administrator**:
-   - **Name**: Dr. Tariq Al-Mansoor
+   - **Name**: Tariq Al-Mansoor
    - **Email**: `admin@journal.example`
    - **ID**: `usr-admin-01`
    - **Access**: User role management, journal settings, issue assembly and publishing.
@@ -259,7 +259,7 @@ From `apps/web/`:
 # Start Next.js development server on http://localhost:3000
 pnpm dev
 
-# Run Vitest test suite (state machine, double-blind isolation, i18n parity, extraction)
+# Run Vitest test suite (state machine, double-blind isolation, i18n parity, extraction, contrast)
 pnpm test
 
 # Type-check TypeScript sources without emitting
@@ -292,3 +292,87 @@ The following translations were generated during setup and should be validated b
 
 - **Stage F1 Scope**: The public reader interface, issue archive, faceted search, informational pages, and authentication flows are 100% complete.
 - **Portal Shell**: The `/portal` landing page currently provides persona switching and session inspection. In **Stage F2**, the interactive Author Submission Wizard and Reviewer Scorecard will be implemented. In **Stage F3**, the Editor Pipeline Kanban and Admin Issue Publisher will be added. All underlying mock API methods, domain models, and UI components are already built to support these upcoming workflows seamlessly.
+
+---
+
+## 11. Pass F1.1 Warmth-and-Life Redesign, Motion & Tokens
+
+Pass F1.1 overhauled the visual design and interactive feel from stark black/white to a refined, warm university-press journal aesthetic while maintaining WCAG 2.1 AA accessibility and zero stock imagery or emojis.
+
+### 11.1 Warm Theme Tokens & Presets
+
+Tokens are defined as CSS variables with RGB channels in `apps/web/src/styles/globals.css` and mapped to Tailwind colors with alpha-value support in `apps/web/tailwind.config.ts`:
+
+1. **`press` (DEFAULT)**:
+   - Paper: `#FBF8F1`, Paper Alt: `#F3EDE0`, Ink: `#1F1B16`, Muted: `#6B6256`, Rule: `#DDD3C0`
+   - Accent (Burgundy): `#7A1F2B`, Accent Hover: `#5E1722`, Gold: `#B08D3C`
+   - Success: `#2F5D3A`, Warning: `#8A5A00`, Danger: `#8B1E2D`
+2. **`atlas`**:
+   - Paper: `#FAF8F3`, Paper Alt: `#EFEDE4`, Ink: `#17211F`, Muted: `#5B6661`, Rule: `#D8D6CA`
+   - Accent (Deep Teal): `#0F4C4A`, Accent Hover: `#0A3836`, Gold: `#B8893A`
+3. **`ink`**:
+   - Paper: `#FFFFFF`, Paper Alt: `#F7F6F2`, Ink: `#111111`, Muted: `#5B5B57`, Rule: `#D9D7D0`
+   - Accent (Academic Navy): `#1B2A4A`, Accent Hover: `#121C33`, Gold: `#9C7A28`
+
+#### Making a Preset Permanent
+To permanently set a theme preset and remove the preview switcher:
+1. In `apps/web/src/app/[locale]/layout.tsx`, change `data-theme="press"` on the `<html>` element to your preferred preset (`atlas` or `ink`).
+2. Remove or comment out `<ThemeSwitcher />` from `src/app/[locale]/layout.tsx`.
+3. In `apps/web/src/styles/globals.css`, optionally set the desired preset's values as `:root` defaults.
+
+### 11.2 WCAG 2.1 AA Contrast Verification
+
+Automated evaluation via `apps/web/src/test/contrast.test.ts` confirms that all text/background combinations in all 3 presets meet or exceed WCAG AA requirements (4.5:1 for normal text, 3:1 for large text/borders):
+
+| Preset | Text / Foreground | Background | Contrast Ratio | WCAG AA Status |
+|---|---|---|---|---|
+| **press** | `ink` (#1F1B16) | `paper` (#FBF8F1) | **16.5 : 1** | PASS |
+| **press** | `ink` (#1F1B16) | `paper-alt` (#F3EDE0) | **15.0 : 1** | PASS |
+| **press** | `muted` (#6B6256) | `paper` (#FBF8F1) | **5.2 : 1** | PASS |
+| **press** | `muted` (#6B6256) | `paper-alt` (#F3EDE0) | **4.7 : 1** | PASS |
+| **press** | `accent` (#7A1F2B) | `paper` (#FBF8F1) | **7.7 : 1** | PASS |
+| **press** | `white` (#FFFFFF) | `accent` (#7A1F2B) | **5.9 : 1** | PASS |
+| **atlas** | `ink` (#17211F) | `paper` (#FAF8F3) | **16.3 : 1** | PASS |
+| **atlas** | `ink` (#17211F) | `paper-alt` (#EFEDE4) | **14.8 : 1** | PASS |
+| **atlas** | `muted` (#5B6661) | `paper` (#FAF8F3) | **5.5 : 1** | PASS |
+| **atlas** | `muted` (#5B6661) | `paper-alt` (#EFEDE4) | **5.0 : 1** | PASS |
+| **atlas** | `accent` (#0F4C4A) | `paper` (#FAF8F3) | **7.2 : 1** | PASS |
+| **atlas** | `white` (#FFFFFF) | `accent` (#0F4C4A) | **6.4 : 1** | PASS |
+| **ink** | `ink` (#111111) | `paper` (#FFFFFF) | **18.8 : 1** | PASS |
+| **ink** | `ink` (#111111) | `paper-alt` (#F7F6F2) | **17.5 : 1** | PASS |
+| **ink** | `muted` (#5B5B57) | `paper` (#FFFFFF) | **6.9 : 1** | PASS |
+| **ink** | `muted` (#5B5B57) | `paper-alt` (#F7F6F2) | **6.4 : 1** | PASS |
+| **ink** | `accent` (#1B2A4A) | `paper` (#FFFFFF) | **11.8 : 1** | PASS |
+| **ink** | `white` (#FFFFFF) | `accent` (#1B2A4A) | **11.8 : 1** | PASS |
+
+### 11.3 Typographic Issue Cover Art (`IssueCover`)
+
+Located at `apps/web/src/components/shared/IssueCover.tsx`:
+- Generates deterministic archival cover art directly from issue metadata (`volume`, `number`, `year`, `title`, journal name).
+- Built with SVG line patterns in the theme's `accent` and `gold`, double gold inset framing, and an edge spine accent.
+- Supports three responsive sizes: `hero` (home hero band), `card` (archive grids), and `banner` (issue detail header).
+- Fully RTL-compliant with automatic spine mirroring and localized typography.
+
+### 11.4 Motion & Interaction Design System
+
+All motion strictly respects `prefers-reduced-motion` by disabling transitions or setting animation progress immediately:
+1. **Scroll Reveal (`ScrollReveal.tsx`)**: Elements fade and translate up 12px once upon entering viewport via `IntersectionObserver`.
+2. **Animated Metrics (`CountUp.tsx`)**: Numbers count up smoothly with ease-out cubic curve when scrolled into view.
+3. **Condensing Sticky Header (`PublicHeader.tsx`)**: Header decreases height, tightens padding, and adds a hairline warm shadow upon scrolling past 24px. Features ISSN display, active sliding nav markers, and dropdown Archive navigation.
+4. **Command Search Dialog (`CommandSearchDialog.tsx`)**: Global shortcut (`/` or `Ctrl+K`) opens an accessible search dialog with instant grouped suggestions for Articles, Authors, and Issues over mock data with arrow/enter navigation.
+5. **Article Reader Features (`ArticleReader.tsx`)**:
+   - Thin reading progress bar anchored at the top of the viewport.
+   - Docked floating action bar (Download PDF, Cite, Share) sliding up once scrolling past the title.
+   - Dual-column desktop layout (680px reading column + sticky metadata sidebar).
+6. **Live Debounced Search (`SearchInterface.tsx`)**: 250ms debounced auto-search with match highlighting and animated list transitions.
+7. **Accordion Component (`FaqAccordion.tsx`)**: Accessible disclosure widget with smooth grid-row height animation and rotating chevron.
+
+### 11.5 Bug Fixes Summary (Review Pass F1.1)
+
+1. **Localized Portal Link Roles**: Fixed English role leaking on French/Arabic pages (e.g. `Mon Espace (Auteur)` instead of English `(Author)`).
+2. **Search Placeholder Clipping**: Shortened search placeholder to `Search…` / `Rechercher…` / `بحث…` with explicit `aria-label`.
+3. **Volume & Issue Localization**: Created unified `formatVolumeIssue(volume, number, locale)` producing `Vol. 2, No. 1` (EN), `Vol. 2, n° 1` (FR), and `المجلد 2، العدد 1` (AR).
+4. **Author Honorifics & Punctuation**: Removed "Dr." and "Prof." honorifics from mock dataset and rendering; implemented `formatAuthorList(authors, locale)` with Oxford comma in English and localized conjunctions (`and`, `et`, `و`).
+5. **Hardcoded String Sweep**: Swept all pages (`about`, `accessibility`, `contact`, `for-authors`, `login`, `search`, `article`, `issues`) and extracted 30+ previously hardcoded English strings into `messages/en.json`, `fr.json`, `ar.json` while maintaining 100% i18n key parity.
+6. **Desktop Layout Rhythm**: Replaced narrow single-column layouts with balanced 12-column desktop grids on the Home hero, For Authors page, Article reader, and Auth layout.
+

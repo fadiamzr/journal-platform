@@ -5,33 +5,38 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#111111",
+        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
         paper: {
-          DEFAULT: "#FFFFFF",
-          alt: "#F7F6F2",
+          DEFAULT: "rgb(var(--paper-rgb) / <alpha-value>)",
+          alt: "rgb(var(--paper-alt-rgb) / <alpha-value>)",
         },
-        rule: "#D9D7D0",
-        muted: "#5B5B57",
+        rule: "rgb(var(--rule-rgb) / <alpha-value>)",
+        muted: "rgb(var(--muted-text-rgb) / <alpha-value>)",
         accent: {
-          DEFAULT: "#1B2A4A",
-          bg: "#E4E8EF",
+          DEFAULT: "rgb(var(--accent-rgb) / <alpha-value>)",
+          hover: "rgb(var(--accent-hover-rgb) / <alpha-value>)",
+          bg: "var(--accent-bg)",
+        },
+        gold: {
+          DEFAULT: "rgb(var(--gold-rgb) / <alpha-value>)",
+          muted: "rgb(var(--gold-rgb) / 0.2)",
         },
         success: {
-          DEFAULT: "#2F5D3A",
-          bg: "#E8F0EA",
+          DEFAULT: "rgb(var(--success-rgb) / <alpha-value>)",
+          bg: "var(--success-bg)",
         },
         warning: {
-          DEFAULT: "#8A5A00",
-          bg: "#FFF3D6",
+          DEFAULT: "rgb(var(--warning-rgb) / <alpha-value>)",
+          bg: "var(--warning-bg)",
         },
         danger: {
-          DEFAULT: "#8B1E2D",
-          bg: "#F5E1E4",
+          DEFAULT: "rgb(var(--danger-rgb) / <alpha-value>)",
+          bg: "var(--danger-bg)",
         },
         /* shadcn semantic tokens mapped to CSS vars */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        ring: "rgb(var(--accent-rgb) / <alpha-value>)",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
@@ -64,8 +69,12 @@ const config: Config = {
         },
       },
       fontFamily: {
-        heading: ["var(--font-heading)", "serif"],
+        heading: ["var(--font-heading)", "Georgia", "serif"],
         body: ["var(--font-body)", "sans-serif"],
+      },
+      boxShadow: {
+        warm: "0 4px 14px -2px rgba(31, 27, 22, 0.08)",
+        "warm-lg": "0 8px 24px -4px rgba(31, 27, 22, 0.12)",
       },
       borderRadius: {
         lg: "4px",
@@ -81,7 +90,13 @@ const config: Config = {
         ui: ["15px", { lineHeight: "1.5" }],
       },
       ringColor: {
-        DEFAULT: "#1B2A4A",
+        DEFAULT: "rgb(var(--accent-rgb))",
+      },
+      transitionDuration: {
+        DEFAULT: "180ms",
+      },
+      transitionTimingFunction: {
+        DEFAULT: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
     },
   },

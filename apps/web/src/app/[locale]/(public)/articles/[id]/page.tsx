@@ -4,6 +4,7 @@ import { api } from "@/lib/api";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ArticleReader } from "@/components/article/ArticleReader";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { formatVolumeIssue } from "@/lib/utils";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -52,7 +53,7 @@ export default async function ArticlePage({
     ...(article.issueId
       ? [
           {
-            label: `Vol. ${article.volume || 1}, No. ${article.number || 1}`,
+            label: formatVolumeIssue(article.volume ?? 1, article.number ?? 1, locale),
             href: `/issues/${article.issueId}`,
           },
         ]

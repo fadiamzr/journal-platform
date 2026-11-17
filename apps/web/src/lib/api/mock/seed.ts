@@ -11,7 +11,7 @@ import type {
 export const SEED_USERS: User[] = [
   {
     id: "usr-author-01",
-    fullName: "Dr. Harriet Vance",
+    fullName: "Harriet Vance",
     email: "author@journal.example",
     role: "author",
     preferredLocale: "en",
@@ -19,7 +19,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr-rev-01",
-    fullName: "Prof. Arthur Pendelton",
+    fullName: "Arthur Pendelton",
     email: "reviewer@journal.example",
     role: "reviewer",
     preferredLocale: "en",
@@ -27,7 +27,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr-editor-01",
-    fullName: "Prof. Hélène Vance",
+    fullName: "Hélène Vance",
     email: "editor@journal.example",
     role: "editor",
     preferredLocale: "fr",
@@ -35,7 +35,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr-admin-01",
-    fullName: "Dr. Tariq Al-Mansoor",
+    fullName: "Tariq Al-Mansoor",
     email: "admin@journal.example",
     role: "admin",
     preferredLocale: "ar",
@@ -43,7 +43,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr-rev-02",
-    fullName: "Dr. Nadia Chraïbi",
+    fullName: "Nadia Chraïbi",
     email: "nadia.chraibi@journal.example",
     role: "reviewer",
     preferredLocale: "fr",
@@ -51,7 +51,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr-rev-03",
-    fullName: "Dr. Youssef Bennani",
+    fullName: "Youssef Bennani",
     email: "youssef.bennani@journal.example",
     role: "reviewer",
     preferredLocale: "ar",
@@ -59,7 +59,7 @@ export const SEED_USERS: User[] = [
   },
   {
     id: "usr-rev-04",
-    fullName: "Prof. Miriam Sorkin",
+    fullName: "Miriam Sorkin",
     email: "miriam.sorkin@journal.example",
     role: "reviewer",
     preferredLocale: "en",
@@ -140,14 +140,14 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh", "Institut Méditerranéen d'Histoire"],
         email: "h.vance@edinburgh.ac.uk",
         orcid: "0000-0002-1825-0097",
         isCorresponding: true,
       },
       {
-        fullName: "Dr. Karim Bouzid",
+        fullName: "Karim Bouzid",
         affiliations: ["Université de Tunis"],
         email: "karim.bouzid@utm.tn",
       },
@@ -182,7 +182,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Prof. Slimane Haddad",
+        fullName: "Slimane Haddad",
         affiliations: ["École des Hautes Études en Sciences Sociales", "Université d'Alger"],
         isCorresponding: true,
       },
@@ -217,13 +217,13 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Fatima Zahra Merroun",
+        fullName: "Fatima Zahra Merroun",
         affiliations: ["جامعة القرويين، فاس"],
         orcid: "0000-0003-9104-5821",
         isCorresponding: true,
       },
       {
-        fullName: "Prof. Edward Miller",
+        fullName: "Edward Miller",
         affiliations: ["University of Cambridge"],
       },
     ],
@@ -257,7 +257,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Panagiotis Kostas",
+        fullName: "Panagiotis Kostas",
         affiliations: ["Aristotle University of Thessaloniki"],
         isCorresponding: true,
       },
@@ -294,12 +294,12 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Aicha Benkirane",
+        fullName: "Aicha Benkirane",
         affiliations: ["Institut Agronomique et Vétérinaire Hassan II"],
         isCorresponding: true,
       },
       {
-        fullName: "Prof. Jean-Marc Dupré",
+        fullName: "Jean-Marc Dupré",
         affiliations: ["Université d'Aix-Marseille"],
       },
     ],
@@ -333,7 +333,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Marco Vianello",
+        fullName: "Marco Vianello",
         affiliations: ["Università di Bologna"],
         isCorresponding: true,
       },
@@ -368,7 +368,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Prof. Mohammed Al-Idrissi",
+        fullName: "Mohammed Al-Idrissi",
         affiliations: ["جامعة محمد الخامس، الرباط"],
         isCorresponding: true,
       },
@@ -403,12 +403,12 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Rachel Sterling",
+        fullName: "Rachel Sterling",
         affiliations: ["University College London"],
         isCorresponding: true,
       },
       {
-        fullName: "Dr. Omar Lamrini",
+        fullName: "Omar Lamrini",
         affiliations: ["Institut National des Sciences de l'Archéologie et du Patrimoine"],
       },
     ],
@@ -444,7 +444,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Prof. Hélène Vance",
+        fullName: "Hélène Vance",
         affiliations: ["Sorbonne Université", "Institut d'Études Avancées"],
         isCorresponding: true,
       },
@@ -479,7 +479,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Arthur Pendelton",
+        fullName: "Arthur Pendelton",
         affiliations: ["Oxford University"],
         isCorresponding: true,
       },
@@ -514,7 +514,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Tariq Al-Mansoor",
+        fullName: "Tariq Al-Mansoor",
         affiliations: ["Mohammed V University, Rabat"],
         isCorresponding: true,
       },
@@ -549,7 +549,7 @@ export const SEED_ARTICLES: Article[] = [
     },
     authors: [
       {
-        fullName: "Dr. Livia Moretti",
+        fullName: "Livia Moretti",
         affiliations: ["Sapienza Università di Roma"],
         isCorresponding: true,
       },
@@ -580,7 +580,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -622,7 +622,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -664,7 +664,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -707,7 +707,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -750,7 +750,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -795,7 +795,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -846,7 +846,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,
@@ -889,7 +889,7 @@ export const SEED_SUBMISSIONS: Submission[] = [
     },
     authors: [
       {
-        fullName: "Dr. Harriet Vance",
+        fullName: "Harriet Vance",
         affiliations: ["University of Edinburgh"],
         email: "h.vance@edinburgh.ac.uk",
         isCorresponding: true,

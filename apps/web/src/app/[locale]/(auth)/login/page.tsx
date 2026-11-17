@@ -128,7 +128,7 @@ export default function LoginPage() {
           size="sm"
         >
           <User className="h-3.5 w-3.5 me-1.5" />
-          <span>{loading ? "Signing in…" : t("signInButton")}</span>
+          <span>{loading ? t("signingIn") : t("signInButton")}</span>
         </Button>
       </form>
 

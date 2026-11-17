@@ -2,7 +2,7 @@
   "common": {
     "brandName": "Journal",
     "search": "Search",
-    "searchPlaceholder": "Search articles, authors, keywords…",
+    "searchPlaceholder": "Search…",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "myPortal": "My Portal",
@@ -23,7 +23,12 @@
     "pdf": "PDF",
     "downloadPdf": "Download PDF",
     "language": "Language",
-    "clearAll": "Clear all"
+    "clearAll": "Clear all",
+    "newsletterSuccess": "Thank you for subscribing to journal issue notices.",
+    "archiveByYear": "Archive by Year",
+    "viewAllIssues": "View All Issues",
+    "viewArticle": "Read article",
+    "theme": "Theme"
   },
   "nav": {
     "home": "Home",
@@ -74,6 +79,7 @@
     "tagline": "An International Journal of Humanities & Social Sciences",
     "currentIssueHeading": "Current Issue",
     "currentIssueSubtitle": "Volume {volume}, Number {number} ({year})",
+    "readIssue": "Read the Issue",
     "browseArticles": "Browse Table of Contents",
     "aboutHeading": "About the Journal",
     "aboutSnippet": "The Journal is a peer-reviewed scholarly publication committed to academic rigor, independent critical inquiry, and double-blind peer review across the humanities and social sciences.",
@@ -82,7 +88,23 @@
     "submitSnippet": "We welcome original monographs, critical analyses, and comparative studies in English, French, and Arabic. All submissions undergo double-blind evaluation.",
     "submitAction": "Submission Guidelines & Checklist",
     "recentArticlesHeading": "Recent Publications",
-    "viewArchive": "View All Issues in Archive"
+    "viewArchive": "View All Issues in Archive",
+    "statsArticles": "Published Articles",
+    "statsIssues": "Archived Issues",
+    "statsLanguages": "Working Languages",
+    "statsInstitutions": "Contributing Institutions",
+    "howItWorksHeading": "How It Works for Authors",
+    "howItWorksSubtitle": "A transparent, rigorous, and supportive path from submission to open-access publication.",
+    "step1Title": "1. Prepare Manuscript",
+    "step1Desc": "Format your submission according to our double-blind instructions and citation standards.",
+    "step2Title": "2. AI-Assisted Submission",
+    "step2Desc": "Upload your manuscript PDF; our engine automatically extracts titles, abstracts, and metadata for your review.",
+    "step3Title": "3. Double-Blind Peer Review",
+    "step3Desc": "Two independent domain experts evaluate your work with complete mutual anonymity.",
+    "newsletterHeading": "Issue Notifications",
+    "newsletterSubtitle": "Receive table-of-contents alerts when new issues are published.",
+    "newsletterPlaceholder": "Enter your email address",
+    "newsletterButton": "Subscribe"
   },
   "archive": {
     "title": "Journal Archive",
@@ -122,7 +144,12 @@
     "citationCopied": "Citation copied",
     "affiliations": "Affiliations",
     "correspondingAuthor": "Corresponding Author",
-    "backToIssue": "Back to Issue"
+    "backToIssue": "Back to Issue",
+    "readingProgress": "Reading progress",
+    "cite": "Cite",
+    "copied": "Copied",
+    "license": "License",
+    "copyFailed": "Failed to copy"
   },
   "search": {
     "title": "Search Articles",
@@ -137,7 +164,10 @@
     "resultsCount": "{count, plural, =0 {No articles found} one {# article found} other {# articles found}}",
     "emptyQuery": "Enter a keyword above to search the archive.",
     "noResults": "No publications match your search criteria. Try different terms or reset filters.",
-    "clearFilters": "Reset Filters"
+    "clearFilters": "Reset Filters",
+    "filters": "Filters",
+    "updating": "Updating results…",
+    "clearQuery": "Clear query"
   },
   "forAuthors": {
     "title": "Information for Authors",
@@ -169,7 +199,14 @@
     "faq2A": "Yes. We accept manuscripts in English, French, and Arabic with equal editorial and peer-review standing.",
     "faq3Q": "How long does the review process take?",
     "faq3A": "Initial editorial triage takes approximately 1 to 2 weeks. The full double-blind review process averages 6 to 8 weeks.",
-    "startSubmission": "Submit a Manuscript Online"
+    "startSubmission": "Submit a Manuscript Online",
+    "checklistHeading": "Submission Checklist",
+    "checkItem1": "Original manuscript in PDF format",
+    "checkItem2": "Complete anonymity in body text and metadata",
+    "checkItem3": "Abstract in manuscript language and English",
+    "checkItem4": "Author metadata verified before final submission",
+    "quickHelpHeading": "Need Editorial Assistance?",
+    "quickHelpText": "Our editorial office is available to assist with formatting or portal questions."
   },
   "about": {
     "title": "About the Journal",
@@ -180,7 +217,13 @@
     "openAccessHeading": "Open Access Policy",
     "openAccessBody": "All articles are immediately available worldwide upon publication under the Creative Commons Attribution-NonCommercial (CC BY-NC 4.0) license.",
     "publishingHeading": "Publisher & Archiving",
-    "publishingBody": "Published biannually by University Scholarly Press. Long-term digital preservation is maintained through CLOCKSS and PKP Preservation Network."
+    "publishingBody": "Published biannually by University Scholarly Press. Long-term digital preservation is maintained through CLOCKSS and PKP Preservation Network.",
+    "peerReviewNote": "The editorial office guarantees that all manuscripts sent for external assessment have identifying characteristics removed. Reviewers evaluate manuscripts according to rigorous criteria of originality, methodological depth, conceptual clarity, and scholarly contribution.",
+    "openAccessNote": "Authors retain copyright and grant the journal right of first publication with the work simultaneously licensed under a Creative Commons Attribution-NonCommercial (CC BY-NC 4.0) license. There are never submission fees or article processing charges (APCs).",
+    "publisher": "Publisher",
+    "location": "Location",
+    "printIssn": "Print ISSN",
+    "onlineIssn": "Online ISSN"
   },
   "editorialBoard": {
     "title": "Editorial Board",
@@ -198,13 +241,15 @@
     "title": "Accessibility Statement",
     "subtitle": "Our commitment to digital inclusion, keyboard navigation, and WCAG AA standards.",
     "body1": "The Journal platform is designed to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA requirements.",
+    "body2": "We believe scholarly literature should be accessible to all researchers, practitioners, and students. This platform is designed and continuously tested according to the World Wide Web Consortium (W3C) Web Content Accessibility Guidelines (WCAG) 2.1 Level AA.",
     "featuresHeading": "Key Accessibility Features",
     "feature1": "Complete keyboard navigation support throughout all public pages and portals.",
     "feature2": "High-contrast typography with AA compliance on ink-on-paper color scales.",
     "feature3": "Full bidirectional RTL layout support with semantic text mirroring for Arabic.",
     "feature4": "Dedicated skip-to-content navigation landmark.",
     "feedbackHeading": "Feedback & Support",
-    "feedbackBody": "If you encounter any accessibility barriers, please contact our accessibility team at accessibility@journal.university.example."
+    "feedbackBody": "If you encounter any accessibility barriers, please contact our accessibility team at accessibility@journal.university.example.",
+    "editorialSupport": "Editorial support:"
   },
   "contact": {
     "title": "Contact the Editorial Office",
@@ -215,7 +260,15 @@
     "subjectLabel": "Subject",
     "messageLabel": "Message",
     "sendButton": "Send Message",
-    "sentSuccess": "Thank you. Your message has been received by the editorial office."
+    "sentSuccess": "Thank you. Your message has been received by the editorial office.",
+    "directInquiry": "Direct Inquiry",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "publisher": "Publisher",
+    "messageDispatched": "Message Dispatched",
+    "sendAnother": "Send another message",
+    "sending": "Sending…"
   },
   "auth": {
     "signInTitle": "Sign In to the Platform",
@@ -231,6 +284,7 @@
     "affiliationLabel": "Institutional Affiliation (optional)",
     "agreeTerms": "I agree to the journal's ethical policies, peer review guidelines, and privacy statement.",
     "signInButton": "Sign In",
+    "signingIn": "Signing in…",
     "registerButton": "Register as Author",
     "sendResetButton": "Send Reset Instructions",
     "backToSignIn": "Return to Sign In",
@@ -240,10 +294,10 @@
     "passwordHint": "Use at least 8 characters with letters, numbers, and symbols.",
     "previewModeHeading": "Demo Preview Personas",
     "previewModeDesc": "Select a mock persona below to quickly test role-based portals without credentials:",
-    "authorPersona": "Sign in as Author (Dr. Harriet Vance)",
-    "reviewerPersona": "Sign in as Reviewer (Prof. Arthur Pendelton)",
-    "editorPersona": "Sign in as Editor (Prof. Hélène Vance)",
-    "adminPersona": "Sign in as Administrator (Dr. Tariq Al-Mansoor)",
+    "authorPersona": "Sign in as Author (Harriet Vance)",
+    "reviewerPersona": "Sign in as Reviewer (Arthur Pendelton)",
+    "editorPersona": "Sign in as Editor (Hélène Vance)",
+    "adminPersona": "Sign in as Administrator (Tariq Al-Mansoor)",
     "resetSentTitle": "Reset email sent",
     "resetSentDesc": "If an account exists for {email}, a recovery link has been dispatched.",
     "invalidCredentials": "The email or password entered is incorrect.",
@@ -255,6 +309,12 @@
     "signOut": "Sign Out",
     "switchPersona": "Switch Persona",
     "accessDenied": "Access Restricted",
-    "accessDeniedDesc": "This portal is reserved for users with the {requiredRole} role. Your current role is {currentRole}."
+    "accessDeniedDesc": "This portal is reserved for users with the {requiredRole} role. Your current role is {currentRole}.",
+    "roles": {
+      "author": "Author",
+      "reviewer": "Reviewer",
+      "editor": "Editor",
+      "admin": "Administrator"
+    }
   }
 }
