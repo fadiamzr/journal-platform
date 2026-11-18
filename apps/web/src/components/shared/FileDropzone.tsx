@@ -2,7 +2,6 @@
 
 import React, { useRef, useState } from "react";
 import { Upload, FileCheck, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface FileDropzoneProps {
@@ -74,6 +73,19 @@ export function FileDropzone({
 
   return (
     <div className={cn("space-y-2", className)}>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        tabIndex={-1}
+        onChange={(e) => {
+          if (e.target.files && e.target.files.length > 0) {
+            validateAndSelect(e.target.files[0]);
+          }
+        }}
+        className="sr-only"
+        aria-hidden="true"
+      />
       <div
         tabIndex={0}
         role="button"
@@ -92,19 +104,6 @@ export function FileDropzone({
             : "border-rule bg-paper-alt hover:bg-paper-alt/80 hover:border-muted/40"
         )}
       >
-        <input
-          ref={inputRef}
-          type="file"
-          accept={accept}
-          onChange={(e) => {
-            if (e.target.files && e.target.files.length > 0) {
-              validateAndSelect(e.target.files[0]);
-            }
-          }}
-          className="sr-only"
-          aria-hidden="true"
-        />
-
         {selectedFile ? (
           <div className="flex flex-col items-center space-y-2">
             <FileCheck className="h-8 w-8 text-success" />
@@ -120,18 +119,9 @@ export function FileDropzone({
             <Upload className="h-8 w-8 text-muted" />
             <div className="text-sm font-medium text-ink">{label}</div>
             <div className="text-xs text-muted">{hint}</div>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-2 text-xs"
-              onClick={(e) => {
-                e.stopPropagation();
-                inputRef.current?.click();
-              }}
-            >
+            <span className="mt-2 inline-flex items-center justify-center rounded-[3px] border border-rule bg-paper px-3 py-1.5 text-xs font-medium text-ink shadow-xs">
               Choose File
-            </Button>
+            </span>
           </div>
         )}
       </div>

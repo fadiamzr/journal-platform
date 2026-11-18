@@ -10,4 +10,4 @@ Project documentation lives here.
 | `API.md` | FastAPI core specification, JWKS token verification, RBAC guards, error schema |
 | `WORKFLOW.md` | Submission state machine, round logic, blind-copy flow, permission matrix, file lifecycle |
 | `EXTRACTION.md` | Phase 5 AI extraction engine — architecture, data flow, errors, rate limiting, prompt injection defence |
-| `FRONTEND.md` | Frontend Part F1 — design system, app shell, i18n/RTL, typed mock data layer, public site, and auth |
+| `FRONTEND.md` | Frontend architecture: design system, warm press theme, i18n/RTL, mock layer, public site, auth, Author Portal, and Reviewer Workspace (Parts F1, F1.1, F2) |

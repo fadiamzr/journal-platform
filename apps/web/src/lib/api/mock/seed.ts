@@ -2,6 +2,7 @@ import type {
   Article,
   Issue,
   JournalSettings,
+  Notification,
   Review,
   ReviewAssignment,
   Submission,
@@ -915,18 +916,40 @@ export const SEED_SUBMISSIONS: Submission[] = [
 ];
 
 export const SEED_ASSIGNMENTS: ReviewAssignment[] = [
-  // Assignments for sub-in-review-01:
-  // Reviewer 1 (Arthur Pendelton): completed
+  // 1. INVITATION for Reviewer (Arthur Pendelton): status = invited
   {
-    id: "asg-01",
+    id: "asg-inv-01",
+    submissionId: "sub-submitted-verified",
+    round: 1,
+    reviewerId: "usr-rev-01",
+    status: "invited",
+    invitedAt: "2026-11-10T09:00:00Z",
+    dueAt: "2026-12-05T23:59:59Z",
+  },
+
+  // 2. IN PROGRESS / ACCEPTED with saved review draft for Reviewer (Arthur Pendelton)
+  {
+    id: "asg-acc-01",
     submissionId: "sub-in-review-01",
     round: 1,
     reviewerId: "usr-rev-01",
-    status: "completed",
-    invitedAt: "2026-09-17T09:00:00Z",
-    dueAt: "2026-10-15T23:59:59Z",
+    status: "accepted",
+    invitedAt: "2026-10-15T09:00:00Z",
+    dueAt: "2026-11-30T23:59:59Z",
   },
-  // Reviewer 2 (Nadia Chraïbi): accepted, working on review
+
+  // 3. COMPLETED for Reviewer (Arthur Pendelton)
+  {
+    id: "asg-01",
+    submissionId: "sub-revisions-req-01",
+    round: 1,
+    reviewerId: "usr-rev-01",
+    status: "completed",
+    invitedAt: "2026-08-25T09:00:00Z",
+    dueAt: "2026-09-20T23:59:59Z",
+  },
+
+  // Reviewer 2 (Nadia Chraïbi): accepted on sub-in-review-01
   {
     id: "asg-02",
     submissionId: "sub-in-review-01",
@@ -937,16 +960,7 @@ export const SEED_ASSIGNMENTS: ReviewAssignment[] = [
     dueAt: "2026-10-20T23:59:59Z",
   },
 
-  // Assignment for sub-revisions-req-01 (Round 1 completed)
-  {
-    id: "asg-03",
-    submissionId: "sub-revisions-req-01",
-    round: 1,
-    reviewerId: "usr-rev-01",
-    status: "completed",
-    invitedAt: "2026-08-25T09:00:00Z",
-    dueAt: "2026-09-20T23:59:59Z",
-  },
+  // Additional completed assignment for sub-revisions-req-01
   {
     id: "asg-04",
     submissionId: "sub-revisions-req-01",
@@ -1040,6 +1054,80 @@ export const SEED_REVIEWS: Review[] = [
     confidentialCommentsToEditor:
       "Clearly out of scope for our journal. Recommend reject.",
     submittedAt: "2026-07-01T15:30:00Z",
+  },
+
+  // Saved Draft Review on asg-acc-01 (sub-in-review-01, reviewer usr-rev-01)
+  {
+    assignmentId: "asg-acc-01",
+    scores: {
+      originality: 4,
+      methodology: 3,
+      clarity: 4,
+      significance: 4,
+      relevance: 5,
+    },
+    recommendation: "minor_revisions",
+    commentsToAuthor:
+      "The analysis of epistolary networks linking Aleppo and Livorno is compelling, particularly the attention to merchant probate inventories. I recommend clarifying the role of translation bureaus in Section 2.",
+    confidentialCommentsToEditor:
+      "Draft in progress. A promising submission; the archival groundwork is solid.",
+    isDraft: true,
+  },
+];
+
+export const SEED_NOTIFICATIONS: Notification[] = [
+  // Author notifications (usr-author-01)
+  {
+    id: "notif-auth-01",
+    userId: "usr-author-01",
+    title: "Revisions requested",
+    message: "Your submission 'Customary Pasture Rights and Colonial Forestry in the Middle Atlas' has received reviews and requires revisions.",
+    createdAt: "2026-10-02T15:05:00Z",
+    read: false,
+    link: "/author/sub-revisions-req-01",
+    type: "submission",
+  },
+  {
+    id: "notif-auth-02",
+    userId: "usr-author-01",
+    title: "Submission in review",
+    message: "Your submission 'Cross-Cultural Intellectual Exchanges in Early Modern Aleppo and Livorno' is now under peer review.",
+    createdAt: "2026-09-17T09:30:00Z",
+    read: true,
+    link: "/author/sub-in-review-01",
+    type: "submission",
+  },
+  {
+    id: "notif-auth-03",
+    userId: "usr-author-01",
+    title: "Blind copy verified",
+    message: "The anonymized manuscript for your submission 'Sufi Orders and Trade Caravans in the Sous Valley' has been verified by the editorial office.",
+    createdAt: "2026-10-08T10:00:00Z",
+    read: true,
+    link: "/author/sub-submitted-verified",
+    type: "submission",
+  },
+
+  // Reviewer notifications (usr-rev-01)
+  {
+    id: "notif-rev-01",
+    userId: "usr-rev-01",
+    title: "Review invitation",
+    message: "You have been invited to review 'Sufi Orders and Trade Caravans in the Sous Valley: 17th Century Manuscripts'.",
+    createdAt: "2026-11-10T09:05:00Z",
+    read: false,
+    link: "/reviewer",
+    type: "review",
+  },
+  {
+    id: "notif-rev-02",
+    userId: "usr-rev-01",
+    title: "Review reminder",
+    message: "Your review for 'Cross-Cultural Intellectual Exchanges in Early Modern Aleppo and Livorno' is due on November 30, 2026.",
+    createdAt: "2026-11-15T08:00:00Z",
+    read: false,
+    link: "/reviewer/asg-acc-01",
+    type: "review",
   },
 ];
 

@@ -67,6 +67,20 @@ export interface Submission {
   articleOrder?: number;
   doi?: string;
   history?: StatusEvent[];
+  declarations?: SubmissionDeclarations;
+  coverLetter?: string;
+  suggestedReviewers?: string;
+  excludedReviewers?: string;
+  blindCopyWarnings?: string[];
+  step?: number;
+}
+
+export interface SubmissionDeclarations {
+  originalWork: boolean;
+  notUnderConsideration: boolean;
+  ethicalCompliance: boolean;
+  licenseAgreement: boolean;
+  conflictOfInterest: boolean;
 }
 
 export interface JournalSettings {
@@ -85,6 +99,12 @@ export interface ExtractionResult {
   keywords?: Keywords;
   authors?: Author[];
   error?: string;
+  data?: {
+    title?: string;
+    abstract?: string;
+    keywords?: string[];
+    authors?: Author[];
+  };
 }
 
 export interface ReviewAssignment {
@@ -112,6 +132,7 @@ export interface Review {
   commentsToAuthor: string;
   confidentialCommentsToEditor: string;
   submittedAt?: string;
+  isDraft?: boolean;
 }
 
 export type IssueStatus = "draft" | "published";
@@ -148,6 +169,23 @@ export interface Article {
   order?: number;
 }
 
+export interface NotificationPreferences {
+  emailSubmissions?: boolean;
+  emailReviews?: boolean;
+  emailDecisions?: boolean;
+  submissions?: boolean;
+  reviews?: boolean;
+  decisions?: boolean;
+}
+
+export interface UserProfileUpdate {
+  fullName?: string;
+  affiliation?: string;
+  orcid?: string;
+  preferredLocale?: Locale;
+  notificationPreferences?: NotificationPreferences;
+}
+
 export interface User {
   id: string;
   fullName: string;
@@ -155,6 +193,32 @@ export interface User {
   role: Role;
   preferredLocale: Locale;
   affiliation?: string;
+  orcid?: string;
+  notificationPreferences?: NotificationPreferences;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  createdAt: string;
+  read: boolean;
+  link?: string;
+  type?: "submission" | "review" | "system";
+}
+
+export interface DueDateExtensionRequest {
+  assignmentId: string;
+  proposedDate: string;
+  reason: string;
+  requestedAt: string;
+}
+
+export interface ConflictReport {
+  assignmentId: string;
+  reason: string;
+  reportedAt: string;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

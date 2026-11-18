@@ -2,12 +2,15 @@ import type {
   Article,
   Author,
   AuthorFeedbackView,
+  ConflictReport,
+  DueDateExtensionRequest,
   ExtractionResult,
   Issue,
   JournalSettings,
   Keywords,
   Locale,
   MultilingualText,
+  Notification,
   Recommendation,
   Review,
   ReviewAssignment,
@@ -16,9 +19,10 @@ import type {
   Role,
   Submission,
   User,
+  UserProfileUpdate,
 } from "@/lib/domain/types";
 
-export type { ExtractionResult, JournalSettings };
+export type { ConflictReport, DueDateExtensionRequest, ExtractionResult, JournalSettings, Notification, UserProfileUpdate };
 
 export class ApiError extends Error {
   constructor(
@@ -64,7 +68,7 @@ export interface ApiClient {
   getArticle(id: string): Promise<Article | null>;
   searchArticles(params: SearchParams): Promise<Article[]>;
 
-  // ── Authentication & Session ─────────────────────────────────────────────────
+  // ── Authentication, Session & User Profile ──────────────────────────────────
   signIn(credentials: SignInCredentials): Promise<User>;
   signOut(): Promise<void>;
   getSession(): Promise<User | null>;
@@ -75,13 +79,21 @@ export interface ApiClient {
     preferredLocale?: Locale;
     affiliation?: string;
   }): Promise<User>;
+  updateProfile(userId: string, payload: UserProfileUpdate): Promise<User>;
+  changePassword(userId: string, payload: { currentPassword?: string; newPassword?: string }): Promise<void>;
+  getNotifications(): Promise<Notification[]>;
+  markNotificationAsRead(id: string): Promise<void>;
+  markAllNotificationsAsRead(): Promise<void>;
 
   // ── Author Portal Operations ─────────────────────────────────────────────────
   listMySubmissions(): Promise<Submission[]>;
   createDraft(payload: CreateDraftPayload): Promise<Submission>;
+  saveDraft(submissionId: string, payload: Partial<Submission>): Promise<Submission>;
+  deleteDraft(submissionId: string): Promise<void>;
   getSubmission(id: string): Promise<Submission | null>;
   uploadManuscript(submissionId: string, file: File | { name: string; size: number }): Promise<Submission>;
   uploadBlindCopy(submissionId: string, file: File | { name: string; size: number }): Promise<Submission>;
+  replaceBlindCopy(submissionId: string, file: File | { name: string; size: number }): Promise<Submission>;
   runExtraction(submissionId: string): Promise<ExtractionResult>;
   getExtraction(submissionId: string): Promise<ExtractionResult>;
   updateMetadata(
@@ -101,7 +113,9 @@ export interface ApiClient {
   // ── Reviewer Portal Operations ───────────────────────────────────────────────
   listAssignments(): Promise<ReviewerSubmissionView[]>;
   getAssignment(assignmentId: string): Promise<ReviewerSubmissionView | null>;
-  respondToInvitation(assignmentId: string, accept: boolean): Promise<ReviewAssignment>;
+  respondToInvitation(assignmentId: string, accept: boolean, declineReason?: string): Promise<ReviewAssignment>;
+  requestDueDateExtension(assignmentId: string, payload: { proposedDate: string; reason: string }): Promise<DueDateExtensionRequest>;
+  reportConflict(assignmentId: string, reason: string): Promise<ConflictReport>;
   getReview(assignmentId: string): Promise<Review | null>;
   saveReviewDraft(
     assignmentId: string,

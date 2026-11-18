@@ -376,3 +376,116 @@ All motion strictly respects `prefers-reduced-motion` by disabling transitions o
 5. **Hardcoded String Sweep**: Swept all pages (`about`, `accessibility`, `contact`, `for-authors`, `login`, `search`, `article`, `issues`) and extracted 30+ previously hardcoded English strings into `messages/en.json`, `fr.json`, `ar.json` while maintaining 100% i18n key parity.
 6. **Desktop Layout Rhythm**: Replaced narrow single-column layouts with balanced 12-column desktop grids on the Home hero, For Authors page, Article reader, and Auth layout.
 
+---
+
+## 12. Author Portal & Reviewer Workspace (Stage F2)
+
+Stage F2 establishes the complete interactive authenticated workspaces for both **Authors** and **Reviewers** operating under strict double-blind peer review protocols. All flows run against the in-memory/localStorage typed mock layer with instant optimistic updates, full state machine transitions, and comprehensive accessible UI.
+
+### 12.1 Theme Lock
+- The warm academic `press` preset is locked permanently via `data-theme="press"` on the root `<html>` element.
+- Temporary client-side theme switcher components were removed in accordance with production lock specifications.
+
+### 12.2 Unified Portal Shell & Navigation
+- **`PortalLayout` (`components/layout/PortalLayout.tsx`)**: Shared authenticated wrapper providing breadcrumb paths, active route tracking, and integrated `RoleGuard`. If an unauthorized role visits a workspace (e.g. an author navigating to `/reviewer`), a friendly unauthorized card is rendered offering a one-click button to switch to the required demo persona.
+- **`PortalHeader` (`components/layout/PortalHeader.tsx`)**:
+  - Role-specific navigation tabs for authors (`/author`, `/author/new`, `/author/profile`) and reviewers (`/reviewer`, `/reviewer/guidelines`, `/reviewer/profile`).
+  - Active state indicator with bottom accent border.
+  - Notifications Bell popover displaying unread count badge, unread dot indicators, relative timestamps, and one-click "Mark all as read" action.
+  - Persona switcher cleanly formatting names without honorifics: `Author (Harriet Vance)`, `Reviewer (Arthur Pendelton)`, `Editor (Hélène Vance)`, `Admin (Tariq Al-Mansoor)`.
+
+### 12.3 Author Portal (`/author`)
+1. **Dashboard & Submissions List (`/author/page.tsx`)**:
+   - Quick status filter pills: All, Drafts, Under Review, Revisions Requested, Decided.
+   - Live search filter across submission titles and IDs.
+   - Responsive presentation: High-density data table on desktop with sortable columns; structured cards with metadata on mobile viewports.
+   - Contextual action shortcuts: "Continue draft", "Respond to reviewers", "View decision", and "View submission".
+   - Accessible `EmptyState` when filters yield no records.
+
+2. **5-Step Submission Wizard (`components/author/SubmissionWizard.tsx`)**:
+   - **Step 1: Manuscript**: Accessible PDF dropzone, simulated AI extraction card (skeleton pulse, autofill preview for title/abstract/keywords, and error retry state).
+   - **Step 2: Blind Copy**: Upload zone for anonymized manuscript, double-blind guidelines checklist, and warning banner if author identity metadata is detected.
+   - **Step 3: Details & Authors**:
+     - Multilingual metadata tabs (English, French, Arabic) for title and abstract with real-time word counter.
+     - Token-based keywords input manager.
+     - `AuthorsRepeater` (`components/author/AuthorsRepeater.tsx`): Dynamic author rows with full name, email, affiliations, ORCID regex validation (`0000-000X-XXXX-XXXX`), corresponding author flag, accessible reordering buttons (Move Up / Move Down), and deletion dialog.
+   - **Step 4: Declarations**:
+     - Five mandatory compliance checkboxes (Originality, Peer-review agreement, Ethics compliance, Conflict of interest disclosure, and Data availability statement).
+     - Optional cover letter textarea.
+     - Suggested and excluded reviewer specification fields.
+   - **Step 5: Review & Submit**:
+     - Comprehensive summary card displaying all entered metadata and uploaded files.
+     - Real-time autosave status indicator (`Saved at HH:mm`).
+     - "Delete Draft" with confirm dialog.
+     - Final submit confirmation modal triggering transition to `submitted_unverified`.
+
+3. **Submission Detail View (`/author/[id]/page.tsx`)**:
+   - Header with manuscript title, status badge, current revision round, and version number.
+   - Visual audit trail via `Timeline.tsx` mapping lifecycle events.
+   - **Overview Tab**: Full metadata, author list with affiliations, and localized abstract.
+   - **Files Tab**: Original manuscript and blind copy downloads, with "Replace Blind Copy" action modal for unverified submissions.
+   - **Feedback Tab**: Anonymized reviewer evaluations (`Reviewer 1`, `Reviewer 2`) showing 5 evaluation category progress meters and comments to author.
+   - **Decision Tab**: Formal editorial decision notice, revision requirements, and decision timestamp.
+   - **Revision Resubmission**: Interactive revision form (available when status is `revisions_requested`) capturing response to reviewers, updated files, and submitting round incrementation.
+
+4. **Author Profile (`/author/profile/page.tsx`)**:
+   - Profile details: Full name, affiliations, ORCID identifier, and interface language preference.
+   - Email notification preferences with granular category toggles.
+   - Password update form with current/new password validation.
+
+### 12.4 Reviewer Workspace (`/reviewer`)
+1. **Assignments Dashboard (`/reviewer/page.tsx`)**:
+   - Filter tabs: Invitations, In Progress, Completed.
+   - Due date urgency badges: Normal (days remaining), Due Today (warning banner), and Overdue (danger badge).
+   - Invitation actions: Accept invitation (transitions to `accepted`), Decline invitation (dialog capturing mandatory decline reason).
+   - Active assignment actions: "Continue Review" linking to split-pane workspace, "Request Due Date Extension" (dialog capturing proposed extension date and rationale).
+
+2. **Split-Pane Review Workspace (`/reviewer/[assignmentId]/page.tsx`)**:
+   - **Sticky Anonymity Banner**: Prominent notice confirming double-blind protocol, with "Report Conflict of Interest" modal action.
+   - **Resizable Split Layout**: Left pane PDF viewer + Right pane review form with keyboard-accessible divider (`ArrowLeft`/`ArrowRight`/`Home`/`End` to resize).
+   - **Focus Mode**: Quick toggles to expand either the PDF reader or the review form to 100% width.
+   - **`PdfViewer` (`components/reviewer/PdfViewer.tsx`)**: Accessible toolbar with page navigation, zoom in/out/fit, download, and fullscreen capabilities, rendering simulated double-blind academic sheets.
+   - **`ReviewForm` (`components/reviewer/ReviewForm.tsx`)**:
+     - 5 Evaluation Criteria (Originality, Methodology, Clarity, Literature Context, Contribution to Field) with 1-5 segmented rating buttons and explanatory descriptors.
+     - Recommendation selector (Accept, Minor Revisions, Major Revisions, Reject).
+     - Comments for Author (public to author) with live word counter.
+     - Confidential Comments for Editor (guaranteed hidden from author) with visual lock indicator.
+     - Form completeness percentage meter.
+     - Debounced autosave mechanism with timestamp feedback.
+     - Submit confirmation dialog.
+
+3. **Reviewer Guidelines (`/reviewer/guidelines/page.tsx`)**:
+   - Comprehensive reference guide covering double-blind confidentiality ethics, 5-point scoring rubric definitions, and recommendation criteria.
+
+4. **Reviewer Profile (`/reviewer/profile/page.tsx`)**:
+   - Reviewer credentials, bio, research fields, ORCID, notification preferences, and password change.
+
+### 12.5 Double-Blind Protocol Security & Leak Prevention
+Strict isolation is enforced at both domain and presentation layers:
+- **Reviewer View Isolation**: Reviewer endpoints and types (`ReviewerSubmissionView`) strictly strip author names, emails, affiliations, ORCIDs, and cover letters. Manuscript downloads remain locked until the assignment is in `accepted` state AND the blind copy is verified.
+- **Author Feedback View Isolation**: Author endpoints and views (`AuthorFeedbackView`, `AnonymousReviewFeedbackItem`) sanitize reviewer identities into opaque ordinal labels (`Reviewer 1`, `Reviewer 2`) and completely redact confidential editor comments.
+- **Automated DOM Audits**: `portal-f2.test.tsx` and `blindness.test.ts` verify that none of the seed author names or confidential editor comments appear anywhere in the rendered HTML of reviewer or author feedback pages.
+
+### 12.6 Accessibility & Quality Assurance
+- **`vitest-axe` WCAG 2.1 AA Compliance**: Zero violations across interactive components (`Stepper`, `FileDropzone`, `AuthorsRepeater`, `ReviewForm`, and `ComingSoon`).
+- **100% i18n Key Parity**: All strings in `messages/en.json`, `fr.json`, and `ar.json` under namespaces `portalNav`, `author`, `reviewer`, and `portal` maintain 100% parity verified by `src/i18n/parity.test.ts`.
+- **Full Suite Status**: All 50 tests across 6 test suites pass cleanly with 0 TypeScript errors and 0 ESLint warnings.
+
+### 12.7 Portal Redirection & Chrome Polish (Pass F2.1)
+1. **Dynamic Role Redirection (`/[locale]/portal`)**: Replaced the static placeholder with an active role redirector:
+   - `author` -> `/[locale]/author`
+   - `reviewer` -> `/[locale]/reviewer`
+   - `editor` -> `/[locale]/editor`
+   - `admin` -> `/[locale]/admin`
+   - Unauthenticated sessions are gracefully routed to `/[locale]/login`.
+2. **Editorial & Admin Coming Soon Workspaces (`/editor`, `/admin`)**:
+   - Polished, fully accessible coming soon workspaces rendered inside `PortalLayout`.
+   - Outlines planned Stage F3 modules: manuscript triage, reviewer matching, issue builder, editorial decisions, user administration, journal configuration, and analytics.
+   - Provides direct navigation links to the public journal site and demo persona switching.
+3. **Mock-Only Persona Submenu**:
+   - The demo persona switcher in `PortalHeader` was relocated into the user dropdown menu as a nested "Switch preview persona" submenu.
+   - Guarded by `NEXT_PUBLIC_API_MODE === "mock"`, automatically hiding in production live mode.
+4. **Academic Honorifics Removal**:
+   - Swept and stripped all academic honorifics ("Dr.", "Prof.") from user names in portal chrome, welcome headers, persona switchers, registration placeholders, and editorial board brand configuration.
+   - Added `stripHonorifics` utility in `lib/utils.ts`.
+

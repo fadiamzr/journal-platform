@@ -6,7 +6,6 @@ import { routing, type AppLocale } from "@/i18n/routing";
 import { getFontVariables } from "@/styles/fonts";
 import { Toaster } from "@/components/ui/sonner";
 import { SessionProvider } from "@/lib/auth/session-context";
-import { ThemeSwitcher } from "@/components/shared/ThemeSwitcher";
 import { brand } from "@/config/brand";
 import "@/styles/globals.css";
 
@@ -64,18 +63,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} dir={dir} className={fontClasses} data-theme="press">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){ try { var t = localStorage.getItem('journal_theme_preset'); if (t) document.documentElement.dataset.theme = t; } catch(e){} })()`,
-          }}
-        />
-      </head>
       <body className="min-h-screen bg-paper text-ink flex flex-col font-body selection:bg-accent-bg selection:text-accent">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SessionProvider>
             {children}
-            <ThemeSwitcher />
             <Toaster position="bottom-right" />
           </SessionProvider>
         </NextIntlClientProvider>

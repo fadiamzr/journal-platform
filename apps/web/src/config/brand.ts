@@ -100,33 +100,33 @@ export const brand: BrandConfig = {
   },
   editorialBoard: {
     editorInChief: {
-      name: "Prof. Hélène Vance",
+      name: "Hélène Vance",
       affiliation: "Institut d'Études Avancées",
       orcid: "0000-0002-1825-0097",
     },
     associateEditors: [
       {
-        name: "Dr. Tariq Al-Mansoor",
+        name: "Tariq Al-Mansoor",
         affiliation: "Faculty of Letters & Human Sciences, Rabat",
         role: "Middle Eastern & North African Studies",
       },
       {
-        name: "Prof. Arthur Pendelton",
+        name: "Arthur Pendelton",
         affiliation: "Department of Social History, Oxford",
         role: "European & Global History",
       },
       {
-        name: "Dr. Nadia Chraïbi",
+        name: "Nadia Chraïbi",
         affiliation: "Centre de Sociologie Urbaine, Lyon",
         role: "Contemporary Social Theory",
       },
     ],
     editorialBoardMembers: [
-      { name: "Prof. Miriam Sorkin", affiliation: "University of Chicago" },
-      { name: "Dr. Youssef Bennani", affiliation: "Université Mohammed V, Rabat" },
-      { name: "Prof. Luc Renard", affiliation: "École des Hautes Études en Sciences Sociales" },
-      { name: "Dr. Amina El-Khatib", affiliation: "American University of Beirut" },
-      { name: "Prof. Carlos Mendez", affiliation: "Universidad Complutense de Madrid" },
+      { name: "Miriam Sorkin", affiliation: "University of Chicago" },
+      { name: "Youssef Bennani", affiliation: "Université Mohammed V, Rabat" },
+      { name: "Luc Renard", affiliation: "École des Hautes Études en Sciences Sociales" },
+      { name: "Amina El-Khatib", affiliation: "American University of Beirut" },
+      { name: "Carlos Mendez", affiliation: "Universidad Complutense de Madrid" },
     ],
   },
   logo: {

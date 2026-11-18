@@ -70,6 +70,8 @@ export function cleanAuthorName(name: string): string {
     .trim();
 }
 
+export const stripHonorifics = cleanAuthorName;
+
 /**
  * Formats a list of authors with correct typographic punctuation and localized conjunctions:
  * - EN: "Alice Smith and Bob Jones" / "Alice Smith, Bob Jones, and Charlie Brown"

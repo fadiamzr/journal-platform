@@ -3,6 +3,7 @@ import type {
   ExtractionResult,
   Issue,
   JournalSettings,
+  Notification,
   Review,
   ReviewAssignment,
   Submission,
@@ -14,6 +15,7 @@ import {
   SEED_ARTICLES,
   SEED_ASSIGNMENTS,
   SEED_ISSUES,
+  SEED_NOTIFICATIONS,
   SEED_REVIEWS,
   SEED_SETTINGS,
   SEED_SUBMISSIONS,
@@ -29,6 +31,7 @@ export interface MockStoreData {
   submissions: Submission[];
   assignments: ReviewAssignment[];
   reviews: Review[];
+  notifications: Notification[];
   settings: JournalSettings;
   extractions: Record<string, ExtractionResult>;
   currentUserId: string | null;
@@ -42,6 +45,7 @@ function getDefaultStore(): MockStoreData {
     submissions: JSON.parse(JSON.stringify(SEED_SUBMISSIONS)),
     assignments: JSON.parse(JSON.stringify(SEED_ASSIGNMENTS)),
     reviews: JSON.parse(JSON.stringify(SEED_REVIEWS)),
+    notifications: JSON.parse(JSON.stringify(SEED_NOTIFICATIONS)),
     settings: JSON.parse(JSON.stringify(SEED_SETTINGS)),
     extractions: {},
     currentUserId: "usr-author-01", // Default preview persona is Author

@@ -98,7 +98,7 @@ export default function RegisterPage() {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             className="text-xs"
-            placeholder="Dr. Harriet Vance"
+            placeholder="Harriet Vance"
           />
         </div>
 

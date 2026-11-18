@@ -9,14 +9,21 @@ import type {
 } from "@/lib/domain/types";
 import { useTranslations } from "next-intl";
 
-type StatusType =
+export type StatusType =
   | { kind: "submission"; value: SubmissionStatus }
   | { kind: "assignment"; value: AssignmentStatus }
   | { kind: "recommendation"; value: Recommendation }
   | { kind: "extraction"; value: ExtractionStatus };
 
+export type StatusProp =
+  | StatusType
+  | SubmissionStatus
+  | AssignmentStatus
+  | Recommendation
+  | ExtractionStatus;
+
 interface StatusBadgeProps {
-  status: StatusType;
+  status: StatusProp;
   className?: string;
 }
 
@@ -29,10 +36,21 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   let label = "";
   let variant: "default" | "outline" | "success" | "warning" | "danger" | "accent" = "default";
 
-  switch (status.kind) {
+  const resolved: StatusType =
+    typeof status === "string"
+      ? ["draft", "submitted", "in_review", "revisions_requested", "accepted", "rejected", "published"].includes(status)
+        ? { kind: "submission", value: status as SubmissionStatus }
+        : ["invited", "accepted", "declined", "completed"].includes(status)
+        ? { kind: "assignment", value: status as AssignmentStatus }
+        : ["accept", "minor_revisions", "major_revisions", "reject"].includes(status)
+        ? { kind: "recommendation", value: status as Recommendation }
+        : { kind: "extraction", value: status as ExtractionStatus }
+      : status;
+
+  switch (resolved.kind) {
     case "submission":
-      label = tStatus(status.value);
-      switch (status.value) {
+      label = tStatus(resolved.value);
+      switch (resolved.value) {
         case "draft":
           variant = "outline";
           break;
@@ -56,8 +74,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
       break;
 
     case "assignment":
-      label = tAssignment(status.value);
-      switch (status.value) {
+      label = tAssignment(resolved.value);
+      switch (resolved.value) {
         case "invited":
           variant = "warning";
           break;
@@ -74,8 +92,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
       break;
 
     case "recommendation":
-      label = tRec(status.value);
-      switch (status.value) {
+      label = tRec(resolved.value);
+      switch (resolved.value) {
         case "accept":
           variant = "success";
           break;
@@ -90,8 +108,8 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
       break;
 
     case "extraction":
-      label = tExtract(status.value);
-      switch (status.value) {
+      label = tExtract(resolved.value);
+      switch (resolved.value) {
         case "not_started":
           variant = "outline";
           break;

@@ -1,8 +1,11 @@
 import type {
   Article,
   AuthorFeedbackView,
+  ConflictReport,
+  DueDateExtensionRequest,
   Issue,
   JournalSettings,
+  Notification,
   Review,
   ReviewAssignment,
   ReviewerSubmissionView,
@@ -10,6 +13,7 @@ import type {
   Locale,
   Submission,
   User,
+  UserProfileUpdate,
 } from "@/lib/domain/types";
 import {
   ApiClient,
@@ -225,6 +229,72 @@ export const mockApiClient: ApiClient = {
     return newUser;
   },
 
+  async updateProfile(userId: string, payload: UserProfileUpdate): Promise<User> {
+    await simulateLatency(150, 300);
+    const store = loadStore();
+    const user = requireAuth(store);
+    if (user.id !== userId && user.role !== "admin") {
+      throw new ApiError("Forbidden", 403, "FORBIDDEN");
+    }
+    const target = store.users.find((u) => u.id === userId);
+    if (!target) throw new ApiError("User not found", 404, "NOT_FOUND");
+
+    if (payload.fullName !== undefined) target.fullName = payload.fullName;
+    if (payload.affiliation !== undefined) target.affiliation = payload.affiliation;
+    if (payload.orcid !== undefined) target.orcid = payload.orcid;
+    if (payload.preferredLocale !== undefined) target.preferredLocale = payload.preferredLocale;
+    if (payload.notificationPreferences !== undefined) {
+      target.notificationPreferences = {
+        ...target.notificationPreferences,
+        ...payload.notificationPreferences,
+      };
+    }
+    saveStore(store);
+    return target;
+  },
+
+  async changePassword(userId: string, _payload: { currentPassword?: string; newPassword?: string }): Promise<void> {
+    void _payload;
+    await simulateLatency(200, 400);
+    const store = loadStore();
+    const user = requireAuth(store);
+    if (user.id !== userId && user.role !== "admin") {
+      throw new ApiError("Forbidden", 403, "FORBIDDEN");
+    }
+  },
+
+  async getNotifications(): Promise<Notification[]> {
+    await simulateLatency(100, 200);
+    const store = loadStore();
+    const user = requireAuth(store);
+    return (store.notifications || [])
+      .filter((n) => n.userId === user.id)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  },
+
+  async markNotificationAsRead(id: string): Promise<void> {
+    await simulateLatency(50, 150);
+    const store = loadStore();
+    const user = requireAuth(store);
+    const notif = (store.notifications || []).find((n) => n.id === id);
+    if (notif && notif.userId === user.id) {
+      notif.read = true;
+      saveStore(store);
+    }
+  },
+
+  async markAllNotificationsAsRead(): Promise<void> {
+    await simulateLatency(50, 150);
+    const store = loadStore();
+    const user = requireAuth(store);
+    (store.notifications || []).forEach((n) => {
+      if (n.userId === user.id) {
+        n.read = true;
+      }
+    });
+    saveStore(store);
+  },
+
   // ── Author Portal Operations ─────────────────────────────────────────────────
 
   async listMySubmissions(): Promise<Submission[]> {
@@ -271,6 +341,49 @@ export const mockApiClient: ApiClient = {
     store.submissions.unshift(newSub);
     saveStore(store);
     return newSub;
+  },
+
+  async saveDraft(submissionId: string, payload: Partial<Submission>): Promise<Submission> {
+    await simulateLatency(150, 300);
+    const store = loadStore();
+    const user = requireAuth(store);
+    const sub = store.submissions.find((s) => s.id === submissionId);
+    if (!sub) throw new ApiError("Submission not found", 404, "NOT_FOUND");
+    if (user.role === "author" && sub.authorId !== user.id) {
+      throw new ApiError("Forbidden", 403, "FORBIDDEN");
+    }
+
+    if (payload.title) sub.title = { ...sub.title, ...payload.title };
+    if (payload.abstract) sub.abstract = { ...sub.abstract, ...payload.abstract };
+    if (payload.keywords) sub.keywords = { ...sub.keywords, ...payload.keywords };
+    if (payload.manuscriptLanguage) sub.manuscriptLanguage = payload.manuscriptLanguage;
+    if (payload.authors) sub.authors = payload.authors;
+    if (payload.declarations) sub.declarations = payload.declarations;
+    if (payload.coverLetter !== undefined) sub.coverLetter = payload.coverLetter;
+    if (payload.suggestedReviewers !== undefined) sub.suggestedReviewers = payload.suggestedReviewers;
+    if (payload.excludedReviewers !== undefined) sub.excludedReviewers = payload.excludedReviewers;
+    if (payload.step !== undefined) sub.step = payload.step;
+    if (payload.blindCopyWarnings !== undefined) sub.blindCopyWarnings = payload.blindCopyWarnings;
+
+    saveStore(store);
+    return sub;
+  },
+
+  async deleteDraft(submissionId: string): Promise<void> {
+    await simulateLatency(150, 300);
+    const store = loadStore();
+    const user = requireAuth(store);
+    const idx = store.submissions.findIndex((s) => s.id === submissionId);
+    if (idx === -1) throw new ApiError("Submission not found", 404, "NOT_FOUND");
+    const sub = store.submissions[idx];
+    if (user.role === "author" && sub.authorId !== user.id) {
+      throw new ApiError("Forbidden", 403, "FORBIDDEN");
+    }
+    if (sub.status !== "draft") {
+      throw new ApiError("Only drafts can be deleted.", 400, "CANNOT_DELETE_NON_DRAFT");
+    }
+    store.submissions.splice(idx, 1);
+    saveStore(store);
   },
 
   async getSubmission(id: string): Promise<Submission | null> {
@@ -338,6 +451,13 @@ export const mockApiClient: ApiClient = {
 
     saveStore(store);
     return sub;
+  },
+
+  async replaceBlindCopy(
+    submissionId: string,
+    file: File | { name: string; size: number }
+  ): Promise<Submission> {
+    return this.uploadBlindCopy(submissionId, file);
   },
 
   async runExtraction(submissionId: string): Promise<ExtractionResult> {
@@ -598,7 +718,12 @@ export const mockApiClient: ApiClient = {
     };
   },
 
-  async respondToInvitation(assignmentId: string, accept: boolean): Promise<ReviewAssignment> {
+  async respondToInvitation(
+    assignmentId: string,
+    accept: boolean,
+    _declineReason?: string
+  ): Promise<ReviewAssignment> {
+    void _declineReason;
     await simulateLatency(200, 400);
     const store = loadStore();
     const user = requireRole(store, ["reviewer", "editor", "admin"]);
@@ -612,6 +737,48 @@ export const mockApiClient: ApiClient = {
     a.status = accept ? "accepted" : "declined";
     saveStore(store);
     return a;
+  },
+
+  async requestDueDateExtension(
+    assignmentId: string,
+    payload: { proposedDate: string; reason: string }
+  ): Promise<DueDateExtensionRequest> {
+    await simulateLatency(150, 300);
+    const store = loadStore();
+    const user = requireRole(store, ["reviewer", "editor", "admin"]);
+    const a = store.assignments.find((asg) => asg.id === assignmentId);
+    if (!a) throw new ApiError("Assignment not found", 404, "NOT_FOUND");
+    if (user.role === "reviewer" && a.reviewerId !== user.id) {
+      throw new ApiError("Forbidden", 403, "FORBIDDEN");
+    }
+
+    return {
+      assignmentId,
+      proposedDate: payload.proposedDate,
+      reason: payload.reason,
+      requestedAt: new Date().toISOString(),
+    };
+  },
+
+  async reportConflict(assignmentId: string, reason: string): Promise<ConflictReport> {
+    await simulateLatency(150, 300);
+    const store = loadStore();
+    const user = requireRole(store, ["reviewer", "editor", "admin"]);
+    const a = store.assignments.find((asg) => asg.id === assignmentId);
+    if (!a) throw new ApiError("Assignment not found", 404, "NOT_FOUND");
+    if (user.role === "reviewer" && a.reviewerId !== user.id) {
+      throw new ApiError("Forbidden", 403, "FORBIDDEN");
+    }
+
+    // Automatically decline/unassign on conflict report
+    a.status = "declined";
+    saveStore(store);
+
+    return {
+      assignmentId,
+      reason,
+      reportedAt: new Date().toISOString(),
+    };
   },
 
   async getReview(assignmentId: string): Promise<Review | null> {
